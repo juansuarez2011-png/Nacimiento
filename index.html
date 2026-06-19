@@ -670,8 +670,7 @@
     <!-- HEADER CON LOGO DESDE GITHUB -->
     <header class="app-header">
         <div class="logo-container">
-            <!-- CAMBIAR "juansuarez2011-png" POR TU USUARIO DE GITHUB -->
-            <!-- La URL correcta es: https://raw.githubusercontent.com/TU-USUARIO/Nacimiento/main/LOGO.png -->
+            <!-- URL CORRECTA PARA TU REPOSITORIO "Nacimiento" -->
             <img id="logoApp" 
                  src="https://raw.githubusercontent.com/juansuarez2011-png/Nacimiento/main/LOGO.png" 
                  alt="Logo Syntro"
@@ -937,8 +936,7 @@
 
     // ===== SISTEMA DE LOGO =====
     function cargarLogo() {
-        // URL CORRECTA para tu repositorio "Nacimiento"
-        // CAMBIAR "juansuarez2011-png" POR TU USUARIO DE GITHUB
+        // URL CORRECTA PARA TU REPOSITORIO "Nacimiento"
         const repoUrl = 'https://raw.githubusercontent.com/juansuarez2011-png/Nacimiento/main/LOGO.png';
         const img = document.getElementById('logoApp');
         
@@ -1100,7 +1098,7 @@
         }
     }
 
-    // ===== CÁLCULO DE IPP POR MADRE (SOLO PARTOS EFECTIVOS) =====
+    // ===== CÁLCULO DE IPP POR MADRE =====
     function calcularIPP(madre) {
         if (!madre) return null;
         
@@ -1134,7 +1132,7 @@
         }
         
         if (ipp === null) {
-            display.innerHTML = `Madre ${madre}: IPP no disponible (requiere 2+ partos efectivos)`;
+            display.innerHTML = `Madre ${madre}: IPP no disponible (requiere 2+ partos)`;
             return;
         }
         
@@ -1248,8 +1246,8 @@
         document.getElementById('criaFields').classList.remove('hidden');
         
         const msg = evento === 'Gemelar' ? 
-            `✅ Registro Gemelar Guardado\nID1: ${idCria}\nID2: ${idCria2}\nParto #${numeroParto}\nIPP: ${ipp || 'N/A'}` :
-            `✅ Registro Guardado\nID: ${idCria}\nParto #${numeroParto}\nIPP: ${ipp || 'N/A'}`;
+            `✅ Registro Gemelar Guardado\nID1: ${idCria}\nID2: ${idCria2}\nParto #${numeroParto}` :
+            `✅ Registro Guardado\nID: ${idCria}\nParto #${numeroParto}`;
         alert(msg);
         
         actualizarCriaID();
@@ -1297,7 +1295,6 @@
                 const padreDisplay = r.padre || '-';
                 const realIndex = db.indexOf(r);
                 
-                // Mostrar IPP si existe, sino mostrar "N/A"
                 let ippDisplay = 'N/A';
                 if (r.ipp !== null && r.ipp !== undefined && r.ipp !== '-') {
                     ippDisplay = `${r.ipp} días`;
