@@ -65,12 +65,15 @@
             gap: 12px;
         }
 
+        /* ===== LOGO BLANCO Y TRANSPARENTE ===== */
         .app-header img {
             max-height: 50px;
             width: auto;
-            background: white;
-            padding: 4px 8px;
-            border-radius: 8px;
+            /* Filtro para hacer visible el logo blanco/transparente sobre fondo oscuro */
+            filter: brightness(0) invert(1);
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
         }
 
         .app-header h1 {
@@ -582,6 +585,10 @@
                 justify-content: center;
             }
 
+            .app-header img {
+                max-height: 35px;
+            }
+
             .app-header h1 {
                 font-size: 1.1rem;
             }
@@ -667,11 +674,11 @@
 <body>
 
 <div class="container">
-    <!-- HEADER CON LOGO LOCAL COMO EN EL EJEMPLO -->
+    <!-- HEADER CON LOGO BLANCO Y TRANSPARENTE -->
     <header class="app-header">
         <div class="logo-container">
-            <!-- LOGO CARGADO DIRECTAMENTE DESDE EL ARCHIVO LOCAL -->
-            <img src="LOGO.png" alt="Logo SINTRO">
+            <!-- LOGO BLANCO Y TRANSPARENTE CON FILTRO CSS -->
+            <img src="logo.png" alt="Logo SINTRO">
             <div>
                 <h1>Syntro BioControl Pro V24</h1>
                 <span class="subtitle">Sistema de Registro de Nacimientos</span>
