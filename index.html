@@ -670,9 +670,10 @@
     <!-- HEADER CON LOGO DESDE GITHUB -->
     <header class="app-header">
         <div class="logo-container">
-            <!-- CAMBIAR "TU-USUARIO" POR TU NOMBRE DE USUARIO DE GITHUB -->
+            <!-- CAMBIAR "juansuarez2011-png" POR TU USUARIO DE GITHUB -->
+            <!-- La URL correcta es: https://raw.githubusercontent.com/TU-USUARIO/Nacimiento/main/LOGO.png -->
             <img id="logoApp" 
-                 src="https://raw.githubusercontent.com/TU-USUARIO/syntro-biocontrol/main/LOGO.png" 
+                 src="https://raw.githubusercontent.com/juansuarez2011-png/Nacimiento/main/LOGO.png" 
                  alt="Logo Syntro"
                  onerror="this.style.display='none'">
             <div>
@@ -936,8 +937,9 @@
 
     // ===== SISTEMA DE LOGO =====
     function cargarLogo() {
-        // CAMBIAR "TU-USUARIO" POR TU NOMBRE DE USUARIO DE GITHUB
-        const repoUrl = 'https://raw.githubusercontent.com/TU-USUARIO/syntro-biocontrol/main/LOGO.png';
+        // URL CORRECTA para tu repositorio "Nacimiento"
+        // CAMBIAR "juansuarez2011-png" POR TU USUARIO DE GITHUB
+        const repoUrl = 'https://raw.githubusercontent.com/juansuarez2011-png/Nacimiento/main/LOGO.png';
         const img = document.getElementById('logoApp');
         
         const cachedLogo = localStorage.getItem('logoBase64');
@@ -1098,7 +1100,7 @@
         }
     }
 
-    // ===== CÁLCULO DE IPP POR MADRE =====
+    // ===== CÁLCULO DE IPP POR MADRE (SOLO PARTOS EFECTIVOS) =====
     function calcularIPP(madre) {
         if (!madre) return null;
         
@@ -1132,7 +1134,7 @@
         }
         
         if (ipp === null) {
-            display.innerHTML = `Madre ${madre}: IPP no disponible (requiere 2+ partos)`;
+            display.innerHTML = `Madre ${madre}: IPP no disponible (requiere 2+ partos efectivos)`;
             return;
         }
         
@@ -1231,7 +1233,6 @@
         localStorage.setItem('sys_partos', JSON.stringify(db));
         
         // ===== LIMPIAR CAMPOS (PERO MANTENER FINCA) =====
-        // NO se borra "finca" - se mantiene para seguir registrando
         document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
         document.getElementById('madre').value = '';
         document.getElementById('padre').value = '';
@@ -1243,13 +1244,12 @@
         document.getElementById('sx2').value = 'Macho';
         document.getElementById('evento').value = 'Normal';
         
-        // Ocultar gemelo
         document.getElementById('boxGemelo').classList.add('hidden');
         document.getElementById('criaFields').classList.remove('hidden');
         
         const msg = evento === 'Gemelar' ? 
-            `✅ Registro Gemelar Guardado\nID1: ${idCria}\nID2: ${idCria2}\nParto #${numeroParto}` :
-            `✅ Registro Guardado\nID: ${idCria}\nParto #${numeroParto}`;
+            `✅ Registro Gemelar Guardado\nID1: ${idCria}\nID2: ${idCria2}\nParto #${numeroParto}\nIPP: ${ipp || 'N/A'}` :
+            `✅ Registro Guardado\nID: ${idCria}\nParto #${numeroParto}\nIPP: ${ipp || 'N/A'}`;
         alert(msg);
         
         actualizarCriaID();
@@ -1293,10 +1293,15 @@
                 const peso2Display = r.peso2 && r.peso2 !== '-' ? `${r.peso2} kg` : r.peso2 || '-';
                 const sexoDisplay = r.sexo || '-';
                 const sexo2Display = r.sexo2 || '-';
-                const ippDisplay = r.ipp ? `${r.ipp} d` : (r.evento === 'Aborto' || r.evento === 'Mortinato' ? '-' : 'N/A');
                 const criaDisplay = r.idCria2 && r.idCria2 !== '-' ? `${r.idCria} / ${r.idCria2}` : r.idCria || '-';
                 const padreDisplay = r.padre || '-';
                 const realIndex = db.indexOf(r);
+                
+                // Mostrar IPP si existe, sino mostrar "N/A"
+                let ippDisplay = 'N/A';
+                if (r.ipp !== null && r.ipp !== undefined && r.ipp !== '-') {
+                    ippDisplay = `${r.ipp} días`;
+                }
                 
                 return `<tr>
                     <td>${r.fecha}</td>
