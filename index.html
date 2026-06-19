@@ -667,14 +667,11 @@
 <body>
 
 <div class="container">
-    <!-- HEADER CON LOGO DESDE GITHUB -->
+    <!-- HEADER CON LOGO LOCAL COMO EN EL EJEMPLO -->
     <header class="app-header">
         <div class="logo-container">
-            <!-- URL CORRECTA PARA TU REPOSITORIO "Nacimiento" -->
-            <img id="logoApp" 
-                 src="https://raw.githubusercontent.com/juansuarez2011-png/Nacimiento/main/LOGO.png" 
-                 alt="Logo Syntro"
-                 onerror="this.style.display='none'">
+            <!-- LOGO CARGADO DIRECTAMENTE DESDE EL ARCHIVO LOCAL -->
+            <img src="logo.png" alt="Logo SINTRO">
             <div>
                 <h1>Syntro BioControl Pro V24</h1>
                 <span class="subtitle">Sistema de Registro de Nacimientos</span>
@@ -933,40 +930,6 @@
     // ===== CONFIGURACIÓN INICIAL =====
     let db = JSON.parse(localStorage.getItem('sys_partos')) || [];
     let chartEventos, chartMensual, chartPesos;
-
-    // ===== SISTEMA DE LOGO =====
-    function cargarLogo() {
-        // URL CORRECTA PARA TU REPOSITORIO "Nacimiento"
-        const repoUrl = 'https://raw.githubusercontent.com/juansuarez2011-png/Nacimiento/main/LOGO.png';
-        const img = document.getElementById('logoApp');
-        
-        const cachedLogo = localStorage.getItem('logoBase64');
-        if (cachedLogo) {
-            img.src = cachedLogo;
-            img.style.display = 'block';
-            return;
-        }
-        
-        fetch(repoUrl)
-            .then(response => {
-                if (!response.ok) throw new Error('Logo no encontrado');
-                return response.blob();
-            })
-            .then(blob => {
-                const reader = new FileReader();
-                reader.onload = function() {
-                    const base64 = reader.result;
-                    img.src = base64;
-                    localStorage.setItem('logoBase64', base64);
-                    img.style.display = 'block';
-                };
-                reader.readAsDataURL(blob);
-            })
-            .catch(() => {
-                img.style.display = 'none';
-                console.log('Logo no encontrado, usando texto');
-            });
-    }
 
     // ===== CAMBIO DE VISTAS =====
     function switchView(v) {
@@ -1618,7 +1581,6 @@
     // ===== INICIALIZACIÓN =====
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('fecha').valueAsDate = new Date();
-        cargarLogo();
         actualizarCriaID();
         render();
         toggleGemelos();
