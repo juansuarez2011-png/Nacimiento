@@ -65,13 +65,21 @@
             gap: 12px;
         }
 
+        /* ===== LOGO - VERSIÓN CORREGIDA ===== */
         .app-header img {
             max-height: 50px;
             width: auto;
-            background: white;
-            padding: 4px 8px;
-            border-radius: 8px;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            /* Para logos blancos/transparentes sobre fondo oscuro */
+            filter: brightness(0) invert(1);
         }
+
+        /* ===== SI EL LOGO ES OSCURO, QUITA EL FILTRO ===== */
+        /* .app-header img {
+            filter: none;
+        } */
 
         .app-header h1 {
             color: white;
@@ -92,6 +100,7 @@
             gap: 16px;
             margin-left: auto;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .header-stats .stat-badge {
@@ -108,7 +117,23 @@
             font-weight: 700;
         }
 
-        /* ===== LOGIN OFFLINE ===== */
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* ===== LOGIN ===== */
         .login-overlay {
             display: none;
             position: fixed;
@@ -202,7 +227,7 @@
             margin-top: 12px;
         }
 
-        /* ===== TABS ===== */
+        /* ===== RESTO DE ESTILOS ===== */
         .tabs {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -248,7 +273,6 @@
             display: none !important;
         }
 
-        /* ===== CONTENIDO ===== */
         .tab-content {
             padding: 24px;
             animation: fadeIn 0.3s ease;
@@ -257,67 +281,6 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== FILTROS GRÁFICAS ===== */
-        .filtros-graficas {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-            padding: 16px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid var(--syntro-2);
-        }
-
-        .filtros-graficas label {
-            font-weight: 600;
-            font-size: 0.75rem;
-            color: var(--syntro-9);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .filtros-graficas select {
-            padding: 8px 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            background: white;
-            width: 100%;
-        }
-
-        .filtros-graficas select:focus {
-            outline: none;
-            border-color: var(--syntro-7);
-        }
-
-        .filtros-graficas .btn-filtro {
-            padding: 8px 16px;
-            background: var(--syntro-10);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: var(--transition);
-            font-family: inherit;
-            align-self: end;
-        }
-
-        .filtros-graficas .btn-filtro:hover {
-            background: var(--syntro-9);
-        }
-
-        .filtros-graficas .btn-limpiar {
-            background: #95a5a6;
-        }
-
-        .filtros-graficas .btn-limpiar:hover {
-            background: #7f8c8d;
         }
 
         /* ===== FORMULARIO ===== */
@@ -329,15 +292,11 @@
         }
 
         @media (min-width: 600px) {
-            .form-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media (min-width: 900px) {
-            .form-grid {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr 1fr 1fr; }
         }
 
         .input-group {
@@ -588,6 +547,66 @@
         }
 
         /* ===== GRÁFICAS ===== */
+        .filtros-graficas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid var(--syntro-2);
+        }
+
+        .filtros-graficas label {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--syntro-9);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .filtros-graficas select {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: white;
+            width: 100%;
+        }
+
+        .filtros-graficas select:focus {
+            outline: none;
+            border-color: var(--syntro-7);
+        }
+
+        .filtros-graficas .btn-filtro {
+            padding: 8px 16px;
+            background: var(--syntro-10);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            font-family: inherit;
+            align-self: end;
+        }
+
+        .filtros-graficas .btn-filtro:hover {
+            background: var(--syntro-9);
+        }
+
+        .filtros-graficas .btn-limpiar {
+            background: #95a5a6;
+        }
+
+        .filtros-graficas .btn-limpiar:hover {
+            background: #7f8c8d;
+        }
+
         .graph-container {
             margin-top: 20px;
             padding: 16px;
@@ -618,7 +637,6 @@
             background: var(--syntro-10);
         }
 
-        /* ===== FILTRO ===== */
         .filter-bar {
             display: flex;
             gap: 10px;
@@ -641,7 +659,6 @@
             border-color: var(--syntro-7);
         }
 
-        /* ===== IPP DISPLAY ===== */
         .ipp-display {
             background: #f8f9fa;
             padding: 12px 16px;
@@ -652,127 +669,33 @@
             border-left: 4px solid var(--syntro-7);
         }
 
-        /* ===== LOGOUT ===== */
-        .logout-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.8rem;
-            transition: var(--transition);
-        }
-
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            body {
-                padding: 8px;
-            }
-
-            .app-header {
-                padding: 12px 16px;
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-
-            .app-header .logo-container {
-                justify-content: center;
-            }
-
-            .app-header img {
-                max-height: 35px;
-            }
-
-            .app-header h1 {
-                font-size: 1.1rem;
-            }
-
-            .header-stats {
-                justify-content: center;
-                margin-left: 0;
-            }
-
-            .tabs {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .tab-btn {
-                font-size: 0.65rem;
-                padding: 10px 4px;
-            }
-
-            .tab-content {
-                padding: 12px;
-            }
-
-            .filtros-graficas {
-                grid-template-columns: 1fr 1fr;
-                padding: 12px;
-            }
-
-            .input-group input,
-            .input-group select,
-            .input-group textarea {
-                font-size: 0.95rem;
-                padding: 8px 10px;
-            }
-
-            .stat-card p {
-                font-size: 1.1rem;
-            }
-
-            table {
-                font-size: 0.7rem;
-                min-width: 550px;
-            }
-
-            th, td {
-                padding: 5px 6px;
-            }
-
-            .btn-action {
-                font-size: 0.9rem;
-                padding: 12px;
-            }
-
-            .btn-sm {
-                font-size: 0.7rem;
-                padding: 4px 10px;
-            }
-
-            .login-box {
-                padding: 20px;
-            }
+            body { padding: 8px; }
+            .app-header { padding: 12px 16px; flex-direction: column; align-items: stretch; text-align: center; }
+            .app-header .logo-container { justify-content: center; }
+            .app-header img { max-height: 35px; }
+            .app-header h1 { font-size: 1.1rem; }
+            .header-stats { justify-content: center; margin-left: 0; }
+            .tabs { grid-template-columns: repeat(4, 1fr); }
+            .tab-btn { font-size: 0.65rem; padding: 10px 4px; }
+            .tab-content { padding: 12px; }
+            .filtros-graficas { grid-template-columns: 1fr 1fr; padding: 12px; }
+            .input-group input, .input-group select, .input-group textarea { font-size: 0.95rem; padding: 8px 10px; }
+            .stat-card p { font-size: 1.1rem; }
+            table { font-size: 0.7rem; min-width: 550px; }
+            th, td { padding: 5px 6px; }
+            .btn-action { font-size: 0.9rem; padding: 12px; }
+            .btn-sm { font-size: 0.7rem; padding: 4px 10px; }
+            .login-box { padding: 20px; }
         }
 
         @media (min-width: 481px) and (max-width: 768px) {
-            .app-header {
-                padding: 14px 20px;
-            }
-
-            .tab-btn {
-                font-size: 0.75rem;
-                padding: 12px 6px;
-            }
-
-            .tab-content {
-                padding: 16px;
-            }
-
-            .filtros-graficas {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .app-header { padding: 14px 20px; }
+            .tab-btn { font-size: 0.75rem; padding: 12px 6px; }
+            .tab-content { padding: 16px; }
+            .filtros-graficas { grid-template-columns: 1fr 1fr; }
+            .form-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -782,7 +705,8 @@
 <div class="login-overlay active" id="loginOverlay">
     <div class="login-box">
         <div style="text-align:center; margin-bottom:16px;">
-            <img src="LOGO.png" alt="SYNTR0" style="max-height:60px;" onerror="this.style.display='none'">
+            <!-- LOGO EN EL LOGIN (TAMBIÉN CORREGIDO) -->
+            <img src="LOGO.png" alt="SYNTR0" style="max-height:60px; background:transparent;" onerror="this.style.display='none'">
             <h2 style="color:#184E77; margin-top:8px;">SYNTR0 BioControl</h2>
             <p style="color:#666; font-size:0.9rem;">Sistema de Registro de Nacimientos</p>
         </div>
@@ -804,11 +728,17 @@
     </div>
 </div>
 
-<div class="container" id="appMain">
+<div class="container" id="appMain" style="display:none;">
     <!-- HEADER CON LOGO -->
     <header class="app-header">
         <div class="logo-container">
-            <img src="logo.png" alt="Logo Syntro" onerror="this.style.display='none'">
+            <!-- ===== LOGO CORREGIDO ===== -->
+            <!-- Opción 1: Con filtro para logo blanco/transparente -->
+            <img src="LOGO.png" alt="Logo Syntro" onerror="this.style.display='none'">
+            
+            <!-- Opción 2: Sin filtro (para logo oscuro) - descomenta esta línea y comenta la de arriba -->
+            <!-- <img src="LOGO.png" alt="Logo Syntro" style="filter:none;" onerror="this.style.display='none'"> -->
+            
             <div>
                 <h1>Syntro BioControl Pro V24</h1>
                 <span class="subtitle">Sistema de Registro de Nacimientos</span>
@@ -821,6 +751,7 @@
         </div>
     </header>
 
+    <!-- ===== RESTO DEL CÓDIGO (TABS, REGISTRO, DATOS, ETC) ===== -->
     <!-- TABS -->
     <nav class="tabs">
         <button class="tab-btn active" onclick="switchView('reg')">Registro</button>
@@ -912,7 +843,6 @@
             <textarea id="observaciones" rows="2" placeholder="Observaciones adicionales..."></textarea>
         </div>
 
-        <!-- IPP Automático por Madre -->
         <div class="ipp-display" id="ippDisplay">
             Ingrese una madre para calcular su IPP
         </div>
@@ -957,39 +887,28 @@
         </div>
     </div>
 
-    <!-- ===== TAB: GRÁFICAS CON FILTROS ===== -->
+    <!-- ===== TAB: GRÁFICAS ===== -->
     <div id="viewGraficas" class="tab-content hidden">
-        <!-- FILTROS -->
         <div class="filtros-graficas">
             <div>
                 <label>Año</label>
-                <select id="filtroAnio">
-                    <option value="todos">Todos los años</option>
-                </select>
+                <select id="filtroAnio"><option value="todos">Todos los años</option></select>
             </div>
             <div>
                 <label>Mes</label>
                 <select id="filtroMes">
                     <option value="todos">Todos los meses</option>
-                    <option value="1">Enero</option>
-                    <option value="2">Febrero</option>
-                    <option value="3">Marzo</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Mayo</option>
-                    <option value="6">Junio</option>
-                    <option value="7">Julio</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
+                    <option value="1">Enero</option><option value="2">Febrero</option>
+                    <option value="3">Marzo</option><option value="4">Abril</option>
+                    <option value="5">Mayo</option><option value="6">Junio</option>
+                    <option value="7">Julio</option><option value="8">Agosto</option>
+                    <option value="9">Septiembre</option><option value="10">Octubre</option>
+                    <option value="11">Noviembre</option><option value="12">Diciembre</option>
                 </select>
             </div>
             <div>
                 <label>Finca</label>
-                <select id="filtroFinca">
-                    <option value="todos">Todas las fincas</option>
-                </select>
+                <select id="filtroFinca"><option value="todos">Todas las fincas</option></select>
             </div>
             <div>
                 <label>Evento</label>
@@ -1008,7 +927,6 @@
             </div>
         </div>
 
-        <!-- Contenedor de estadísticas filtradas -->
         <div class="summary-stats" id="statsGraficas">
             <div class="stat-card"><h4>Total Eventos</h4><p id="grafTotal">0</p></div>
             <div class="stat-card"><h4>Partos Efectivos</h4><p id="grafEfectivos">0</p></div>
@@ -1020,89 +938,59 @@
             <h3>Distribución de Eventos</h3>
             <div class="chart-wrapper"><canvas id="chartEventos"></canvas></div>
         </div>
-
         <div class="graph-container">
             <h3>Evolución de Partos por Mes</h3>
             <div class="chart-wrapper"><canvas id="chartMensual"></canvas></div>
         </div>
-
         <div class="graph-container">
             <h3>Peso Promedio por Evento</h3>
             <div class="chart-wrapper"><canvas id="chartPesos"></canvas></div>
         </div>
     </div>
 
-    <!-- ===== TAB: IPP POR ANIMAL ===== -->
+    <!-- ===== TAB: IPP ===== -->
     <div id="viewIpp" class="tab-content hidden">
         <div style="margin-bottom:16px; padding:12px 16px; background:#f8f9fa; border-radius:8px; border-left:4px solid var(--syntro-7);">
             <strong>IPP (Intervalo entre Partos)</strong> - Calculado individualmente por cada madre
         </div>
-
         <button class="btn-action" style="background:var(--syntro-5); margin-bottom:16px;" onclick="renderIpp()">
             Actualizar IPP por Madre
         </button>
-
         <div id="ippAlert" class="alert alert-danger alert-hidden"></div>
-
         <div class="ipp-table">
             <table>
-                <thead>
-                    <tr>
-                        <th>Madre</th>
-                        <th>Total Partos</th>
-                        <th>Intervalo Promedio (días)</th>
-                        <th>Último Parto</th>
-                        <th>IPP (días)</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="bodyIpp">
-                    <tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">Se necesitan al menos 2 partos por madre</td></tr>
-                </tbody>
+                <thead><tr><th>Madre</th><th>Total Partos</th><th>Intervalo Promedio (días)</th><th>Último Parto</th><th>IPP (días)</th><th>Estado</th></tr></thead>
+                <tbody id="bodyIpp"><tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">Se necesitan al menos 2 partos por madre</td></tr></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // =====================================================
-    //  SISTEMA OFFLINE SIMPLIFICADO PARA REGISTRO DE NACIMIENTOS
-    // =====================================================
+    // ===== CONFIGURACIÓN INICIAL =====
+    let db = JSON.parse(localStorage.getItem('syntro_partos')) || [];
+    let currentUser = null;
+    let chartEventos, chartMensual, chartPesos;
 
-    // ----- USUARIOS PREDEFINIDOS -----
+    // ===== USUARIOS OFFLINE =====
     const USERS = {
         'admin': { password: btoa('admin123'), role: 'admin' },
         'user': { password: btoa('user123'), role: 'user' }
     };
 
-    // ----- VARIABLES GLOBALES -----
-    let currentUser = null;
-    let db = JSON.parse(localStorage.getItem('syntro_partos')) || [];
-    let chartEventos, chartMensual, chartPesos;
-
-    // =====================================================
-    //  AUTENTICACIÓN OFFLINE
-    // =====================================================
-
+    // ===== AUTENTICACIÓN =====
     function login(username, password) {
         const user = USERS[username];
         if (!user) return { success: false, error: 'Usuario no encontrado' };
-        if (user.password !== btoa(password)) {
-            return { success: false, error: 'Contraseña incorrecta' };
-        }
+        if (user.password !== btoa(password)) return { success: false, error: 'Contraseña incorrecta' };
         currentUser = { username, role: user.role };
         localStorage.setItem('syntro_session', JSON.stringify(currentUser));
-        return { success: true, user: currentUser };
+        return { success: true };
     }
 
     function checkSession() {
         const session = localStorage.getItem('syntro_session');
-        if (session) {
-            try {
-                currentUser = JSON.parse(session);
-                return currentUser;
-            } catch { return null; }
-        }
+        if (session) { try { currentUser = JSON.parse(session); return currentUser; } catch {} }
         return null;
     }
 
@@ -1113,10 +1001,7 @@
         document.getElementById('appMain').style.display = 'none';
     }
 
-    // =====================================================
-    //  LOGIN UI
-    // =====================================================
-
+    // ===== LOGIN UI =====
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const user = document.getElementById('loginUser').value.trim();
@@ -1142,7 +1027,7 @@
     });
 
     // =====================================================
-    //  INICIALIZACIÓN
+    //  FUNCIONES DE LA APLICACIÓN
     // =====================================================
 
     function initApp() {
@@ -1153,10 +1038,6 @@
         actualizarIPP();
         actualizarFiltrosGraficas();
     }
-
-    // =====================================================
-    //  CAMBIO DE VISTAS
-    // =====================================================
 
     function switchView(v) {
         document.getElementById('viewReg').classList.toggle('hidden', v !== 'reg');
@@ -1169,61 +1050,36 @@
         const index = ['reg', 'libro', 'graficas', 'ipp'].indexOf(v);
         if (tabs[index]) tabs[index].classList.add('active');
         
-        if (v === 'graficas') {
-            actualizarFiltrosGraficas();
-            aplicarFiltrosGraficas();
-        }
+        if (v === 'graficas') { actualizarFiltrosGraficas(); aplicarFiltrosGraficas(); }
         if (v === 'ipp') renderIpp();
         if (v === 'libro') render();
     }
 
-    // =====================================================
-    //  GESTIÓN DE GEMELOS
-    // =====================================================
-
     function toggleGemelos() {
         const esGemelar = document.getElementById('evento').value === 'Gemelar';
         document.getElementById('boxGemelo').classList.toggle('hidden', !esGemelar);
-        
         const ocultarCrias = ['Aborto'].includes(document.getElementById('evento').value);
         document.getElementById('criaFields').classList.toggle('hidden', ocultarCrias);
-        
         if (esGemelar) actualizarCriaID();
     }
-
-    // =====================================================
-    //  VALIDACIÓN DE GESTACIÓN
-    // =====================================================
 
     function validarGestacion() {
         const dias = parseInt(document.getElementById('gestacion').value) || 0;
         const evento = document.getElementById('evento').value;
         const alerta = document.getElementById('alertGest');
-        
         const esEfectivo = ['Normal', 'Gemelar', 'Distórcico'].includes(evento);
-        const esValido = esEfectivo ? dias >= 285 : true;
-        
-        if (!esValido) {
-            alerta.classList.remove('alert-hidden');
-            return false;
-        } else {
-            alerta.classList.add('alert-hidden');
-            return true;
-        }
+        if (!esEfectivo) { alerta.classList.add('alert-hidden'); return true; }
+        if (dias >= 285) { alerta.classList.add('alert-hidden'); return true; }
+        alerta.classList.remove('alert-hidden');
+        return false;
     }
 
-    // =====================================================
-    //  GENERACIÓN DE IDs POR AÑO
-    // =====================================================
-
+    // ===== GENERACIÓN DE IDs =====
     function getUltimoCorrelativoPorAnio(anio) {
         const anioStr = anio.toString().slice(-2);
         const registrosAnio = db.filter(r => r.idCria && r.idCria.startsWith(anioStr) && r.idCria !== '-');
         if (registrosAnio.length === 0) return 0;
-        const numeros = registrosAnio.map(r => {
-            const num = parseInt(r.idCria.substring(2));
-            return isNaN(num) ? 0 : num;
-        });
+        const numeros = registrosAnio.map(r => { const num = parseInt(r.idCria.substring(2)); return isNaN(num) ? 0 : num; });
         return Math.max(...numeros);
     }
 
@@ -1231,58 +1087,48 @@
         if (!fecha) return '';
         const anio = new Date(fecha).getFullYear();
         const anioStr = anio.toString().slice(-2);
-        let ultimoCorrelativo = getUltimoCorrelativoPorAnio(anio);
-        const nuevoNumero = ultimoCorrelativo + 1;
-        const pad = nuevoNumero < 10 ? 2 : (nuevoNumero < 100 ? 2 : (nuevoNumero < 1000 ? 3 : 4));
-        return anioStr + nuevoNumero.toString().padStart(pad, '0');
+        let ultimo = getUltimoCorrelativoPorAnio(anio);
+        const nuevo = ultimo + 1;
+        const pad = nuevo < 10 ? 2 : (nuevo < 100 ? 2 : (nuevo < 1000 ? 3 : 4));
+        return anioStr + nuevo.toString().padStart(pad, '0');
     }
 
     function generarIDGemelar(fecha, idCria1) {
         if (!fecha || !idCria1) return '';
-        const numStr = idCria1.substring(2);
-        const num = parseInt(numStr);
+        const num = parseInt(idCria1.substring(2));
         if (isNaN(num)) return '';
-        const nuevoNumero = num + 1;
-        const pad = nuevoNumero < 10 ? 2 : (nuevoNumero < 100 ? 2 : (nuevoNumero < 1000 ? 3 : 4));
+        const nuevo = num + 1;
+        const pad = nuevo < 10 ? 2 : (nuevo < 100 ? 2 : (nuevo < 1000 ? 3 : 4));
         const anio = new Date(fecha).getFullYear();
-        return anio.toString().slice(-2) + nuevoNumero.toString().padStart(pad, '0');
+        return anio.toString().slice(-2) + nuevo.toString().padStart(pad, '0');
     }
 
     function actualizarCriaID() {
         const fecha = document.getElementById('fecha').value;
         if (!fecha) return;
-        
         const evento = document.getElementById('evento').value;
-        const esGemelar = evento === 'Gemelar';
-        
         if (evento === 'Aborto') {
             document.getElementById('idC1').value = '-';
             document.getElementById('idC1Display').textContent = '-';
             return;
         }
-        
-        const idCria1 = generarIDCria(fecha);
-        document.getElementById('idC1').value = idCria1;
-        document.getElementById('idC1Display').textContent = idCria1;
-        
-        if (esGemelar) {
-            const idCria2 = generarIDGemelar(fecha, idCria1);
-            document.getElementById('idC2').value = idCria2;
-            document.getElementById('idC2Display').textContent = idCria2;
+        const id1 = generarIDCria(fecha);
+        document.getElementById('idC1').value = id1;
+        document.getElementById('idC1Display').textContent = id1;
+        if (evento === 'Gemelar') {
+            const id2 = generarIDGemelar(fecha, id1);
+            document.getElementById('idC2').value = id2;
+            document.getElementById('idC2Display').textContent = id2;
         } else {
             document.getElementById('idC2').value = '';
             document.getElementById('idC2Display').textContent = '';
         }
     }
 
-    // =====================================================
-    //  CÁLCULO DE IPP POR MADRE
-    // =====================================================
-
+    // ===== IPP =====
     function calcularIPP(madre) {
         if (!madre) return null;
-        const partos = db
-            .filter(r => r.madre === madre && ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento))
+        const partos = db.filter(r => r.madre === madre && ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento))
             .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
         if (partos.length < 2) return null;
         const intervalos = [];
@@ -1304,10 +1150,7 @@
         display.innerHTML = `Madre ${madre} - IPP: <span style="color:${color};font-weight:700;">${ipp} días</span> (${estado})`;
     }
 
-    // =====================================================
-    //  GUARDAR REGISTRO
-    // =====================================================
-
+    // ===== GUARDAR =====
     function guardar() {
         if (!validarGestacion()) {
             alert('Error: La gestación no cumple con el mínimo de 285 días para parto efectivo');
@@ -1328,29 +1171,20 @@
         }
         
         let idCria = '-', idCria2 = '-';
-        
         if (evento !== 'Aborto') {
             idCria = document.getElementById('idC1').value;
-            if (!idCria || idCria === '-') { alert('Error al generar el ID de la cría'); return; }
-            if (db.some(r => r.idCria === idCria)) {
-                alert('El ID generado ya existe. Por favor verifique.');
-                return;
-            }
+            if (!idCria || idCria === '-') { alert('Error al generar el ID'); return; }
+            if (db.some(r => r.idCria === idCria)) { alert('El ID ya existe'); return; }
             if (evento === 'Gemelar') {
                 idCria2 = document.getElementById('idC2').value;
-                if (!idCria2 || idCria2 === '-') { alert('Error al generar el ID de la segunda cría'); return; }
-                if (db.some(r => r.idCria === idCria2)) {
-                    alert('El ID de la segunda cría ya existe. Por favor verifique.');
-                    return;
-                }
+                if (!idCria2 || idCria2 === '-') { alert('Error al generar ID de segunda cría'); return; }
+                if (db.some(r => r.idCria === idCria2)) { alert('El ID de la segunda cría ya existe'); return; }
             }
         }
         
-        if (evento !== 'Gemelar') {
-            if (db.some(r => r.madre === madre && r.fecha === fecha && r.evento !== 'Gemelar')) {
-                alert('Ya existe un evento registrado para esta madre en esta fecha');
-                return;
-            }
+        if (evento !== 'Gemelar' && db.some(r => r.madre === madre && r.fecha === fecha && r.evento !== 'Gemelar')) {
+            alert('Ya existe un evento registrado para esta madre en esta fecha');
+            return;
         }
         
         const esEfectivo = ['Normal', 'Gemelar', 'Distórcico'].includes(evento);
@@ -1396,20 +1230,15 @@
         document.getElementById('boxGemelo').classList.add('hidden');
         document.getElementById('criaFields').classList.remove('hidden');
         
-        const msg = evento === 'Gemelar' ? 
+        alert(evento === 'Gemelar' ? 
             `✅ Registro Gemelar Guardado\nID1: ${idCria}\nID2: ${idCria2}\nParto #${numeroParto}` :
-            `✅ Registro Guardado\nID: ${idCria}\nParto #${numeroParto}`;
-        alert(msg);
+            `✅ Registro Guardado\nID: ${idCria}\nParto #${numeroParto}`);
         
         actualizarCriaID();
         actualizarIPP();
         render();
         actualizarFiltrosGraficas();
     }
-
-    // =====================================================
-    //  ELIMINAR REGISTRO
-    // =====================================================
 
     function eliminarRegistro(index) {
         if (!confirm('¿Está seguro de eliminar este registro?')) return;
@@ -1420,10 +1249,7 @@
         actualizarFiltrosGraficas();
     }
 
-    // =====================================================
-    //  RENDERIZAR TABLA
-    // =====================================================
-
+    // ===== RENDER =====
     function render(filter = "") {
         const body = document.getElementById('bodyTabla');
         const filtered = db.filter(r => 
@@ -1437,48 +1263,34 @@
         } else {
             body.innerHTML = filtered.map((r, index) => {
                 const badgeClass = {
-                    'Normal': 'badge-normal',
-                    'Gemelar': 'badge-gemelar',
-                    'Distórcico': 'badge-distocico',
-                    'Mortinato': 'badge-mortinato',
+                    'Normal': 'badge-normal', 'Gemelar': 'badge-gemelar',
+                    'Distórcico': 'badge-distocico', 'Mortinato': 'badge-mortinato',
                     'Aborto': 'badge-aborto'
                 }[r.evento] || '';
-                
                 const pesoDisplay = r.peso && r.peso !== '-' ? `${r.peso} kg` : r.peso || '-';
                 const peso2Display = r.peso2 && r.peso2 !== '-' ? `${r.peso2} kg` : r.peso2 || '-';
-                const sexoDisplay = r.sexo || '-';
-                const sexo2Display = r.sexo2 || '-';
                 const criaDisplay = r.idCria2 && r.idCria2 !== '-' ? `${r.idCria} / ${r.idCria2}` : r.idCria || '-';
-                const padreDisplay = r.padre || '-';
                 const realIndex = db.indexOf(r);
-                const ippDisplay = r.ipp ? `${r.ipp} días` : 'N/A';
-                
                 return `<tr>
                     <td>${r.fecha}</td>
                     <td>${r.finca}</td>
                     <td><strong>${r.madre}</strong></td>
-                    <td>${padreDisplay}</td>
+                    <td>${r.padre || '-'}</td>
                     <td>${criaDisplay}</td>
                     <td><span class="badge ${badgeClass}">${r.evento}</span></td>
                     <td>${r.idCria2 && r.idCria2 !== '-' ? pesoDisplay + ' / ' + peso2Display : pesoDisplay}</td>
-                    <td>${r.idCria2 && r.idCria2 !== '-' ? sexoDisplay + ' / ' + sexo2Display : sexoDisplay}</td>
-                    <td>${ippDisplay}</td>
-                    <td>
-                        <button class="btn-sm btn-danger" onclick="eliminarRegistro(${realIndex})">Eliminar</button>
-                    </td>
+                    <td>${r.idCria2 && r.idCria2 !== '-' ? (r.sexo || '-') + ' / ' + (r.sexo2 || '-') : (r.sexo || '-')}</td>
+                    <td>${r.ipp ? r.ipp + ' días' : 'N/A'}</td>
+                    <td><button class="btn-sm btn-danger" onclick="eliminarRegistro(${realIndex})">Eliminar</button></td>
                 </tr>`;
             }).join('');
         }
         
         const total = db.filter(r => ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)).length;
-        const normales = db.filter(r => r.evento === 'Normal').length;
-        const gemelares = db.filter(r => r.evento === 'Gemelar').length;
-        const distocicos = db.filter(r => r.evento === 'Distórcico').length;
-        
         document.getElementById('totalPartos').textContent = total;
-        document.getElementById('normalesCount').textContent = normales;
-        document.getElementById('gemelaresCount').textContent = gemelares;
-        document.getElementById('distocicosCount').textContent = distocicos;
+        document.getElementById('normalesCount').textContent = db.filter(r => r.evento === 'Normal').length;
+        document.getElementById('gemelaresCount').textContent = db.filter(r => r.evento === 'Gemelar').length;
+        document.getElementById('distocicosCount').textContent = db.filter(r => r.evento === 'Distórcico').length;
         document.getElementById('headerTotal').textContent = db.length;
         document.getElementById('headerActivos').textContent = total;
     }
@@ -1486,10 +1298,6 @@
     function filtrar() {
         render(document.getElementById('slicer').value.toLowerCase());
     }
-
-    // =====================================================
-    //  EXPORTAR
-    // =====================================================
 
     function exportarCSV() {
         if (db.length === 0) { alert('No hay datos para exportar'); return; }
@@ -1503,10 +1311,7 @@
         a.click();
     }
 
-    // =====================================================
-    //  FILTROS PARA GRÁFICAS
-    // =====================================================
-
+    // ===== GRÁFICAS =====
     function actualizarFiltrosGraficas() {
         const anios = [...new Set(db.map(r => new Date(r.fecha).getFullYear()))].sort();
         const aniosSelect = document.getElementById('filtroAnio');
@@ -1524,7 +1329,6 @@
         const mes = document.getElementById('filtroMes').value;
         const finca = document.getElementById('filtroFinca').value;
         const evento = document.getElementById('filtroEvento').value;
-
         return db.filter(r => {
             const fecha = new Date(r.fecha);
             let cumple = true;
@@ -1539,12 +1343,10 @@
     function aplicarFiltrosGraficas() {
         const datos = obtenerDatosFiltrados();
         if (datos.length === 0) { alert('No hay datos para los filtros seleccionados'); return; }
-
         document.getElementById('grafTotal').textContent = datos.length;
         document.getElementById('grafEfectivos').textContent = datos.filter(r => ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)).length;
         document.getElementById('grafNormales').textContent = datos.filter(r => r.evento === 'Normal').length;
         document.getElementById('grafGemelares').textContent = datos.filter(r => r.evento === 'Gemelar').length;
-
         renderGraficasFiltradas(datos);
     }
 
@@ -1556,10 +1358,6 @@
         aplicarFiltrosGraficas();
     }
 
-    // =====================================================
-    //  GRÁFICAS
-    // =====================================================
-
     function renderGraficasFiltradas(datos) {
         const eventos = ['Normal', 'Gemelar', 'Distórcico', 'Mortinato', 'Aborto'];
         const counts = eventos.map(e => datos.filter(r => r.evento === e).length);
@@ -1568,7 +1366,7 @@
         if (chartEventos) chartEventos.destroy();
         chartEventos = new Chart(document.getElementById('chartEventos'), {
             type: 'bar',
-            data: { labels: eventos, datasets: [{ label: 'Cantidad de Eventos', data: counts, backgroundColor: colores, borderColor: '#184E77', borderWidth: 1 }] },
+            data: { labels: eventos, datasets: [{ label: 'Cantidad', data: counts, backgroundColor: colores, borderColor: '#184E77', borderWidth: 1 }] },
             options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, stepSize: 1 } } }
         });
 
@@ -1579,7 +1377,7 @@
         if (chartMensual) chartMensual.destroy();
         chartMensual = new Chart(document.getElementById('chartMensual'), {
             type: 'line',
-            data: { labels: meses, datasets: [{ label: 'Partos Efectivos por Mes', data: mensual, borderColor: '#184E77', backgroundColor: 'rgba(24,78,119,0.1)', fill: true, tension: 0.3 }] },
+            data: { labels: meses, datasets: [{ label: 'Partos Efectivos', data: mensual, borderColor: '#184E77', backgroundColor: 'rgba(24,78,119,0.1)', fill: true, tension: 0.3 }] },
             options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true, stepSize: 1 } } }
         });
 
@@ -1596,10 +1394,7 @@
         });
     }
 
-    // =====================================================
-    //  IPP POR MADRE
-    // =====================================================
-
+    // ===== IPP RENDER =====
     function renderIpp() {
         const body = document.getElementById('bodyIpp');
         const alert = document.getElementById('ippAlert');
@@ -1608,7 +1403,7 @@
         db.forEach(r => {
             if (['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)) {
                 if (!partosPorMadre[r.madre]) partosPorMadre[r.madre] = [];
-                partosPorMadre[r.madre].push({ fecha: new Date(r.fecha), evento: r.evento });
+                partosPorMadre[r.madre].push({ fecha: new Date(r.fecha) });
             }
         });
 
@@ -1665,11 +1460,7 @@
         }
     }
 
-    // =====================================================
-    //  INICIALIZACIÓN PRINCIPAL
-    // =====================================================
-
-    // Verificar sesión al cargar
+    // ===== INICIALIZAR =====
     document.addEventListener('DOMContentLoaded', function() {
         const session = checkSession();
         if (session) {
