@@ -34,7 +34,7 @@
 
         body {
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f2f5;
+            background: var(--syntro-1);
             padding: 16px;
             min-height: 100vh;
         }
@@ -165,6 +165,67 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ===== FILTROS GRÁFICAS ===== */
+        .filtros-graficas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid var(--syntro-2);
+        }
+
+        .filtros-graficas label {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--syntro-9);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .filtros-graficas select {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: white;
+            width: 100%;
+        }
+
+        .filtros-graficas select:focus {
+            outline: none;
+            border-color: var(--syntro-7);
+        }
+
+        .filtros-graficas .btn-filtro {
+            padding: 8px 16px;
+            background: var(--syntro-10);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            font-family: inherit;
+            align-self: end;
+        }
+
+        .filtros-graficas .btn-filtro:hover {
+            background: var(--syntro-9);
+        }
+
+        .filtros-graficas .btn-limpiar {
+            background: #95a5a6;
+        }
+
+        .filtros-graficas .btn-limpiar:hover {
+            background: #7f8c8d;
+        }
+
         /* ===== FORMULARIO ===== */
         .form-grid {
             display: grid;
@@ -200,7 +261,8 @@
         }
 
         .input-group input,
-        .input-group select {
+        .input-group select,
+        .input-group textarea {
             padding: 10px 14px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
@@ -213,8 +275,14 @@
             appearance: none;
         }
 
+        .input-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
         .input-group input:focus,
-        .input-group select:focus {
+        .input-group select:focus,
+        .input-group textarea:focus {
             outline: none;
             border-color: var(--syntro-7);
             box-shadow: 0 0 0 3px rgba(22, 138, 173, 0.12);
@@ -236,6 +304,28 @@
             font-size: 0.75rem;
             color: #666;
             margin-top: 2px;
+        }
+
+        .input-group .help-text {
+            font-size: 0.7rem;
+            color: var(--syntro-7);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .input-group .id-preview {
+            background: #f0f7f0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--syntro-10);
+            border: 1px solid var(--syntro-2);
+            margin-top: 2px;
+        }
+
+        .input-group .id-preview strong {
+            color: var(--syntro-7);
         }
 
         /* ===== ALERTAS ===== */
@@ -381,7 +471,7 @@
         /* ===== ESTADÍSTICAS ===== */
         .summary-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 12px;
             margin: 16px 0;
         }
@@ -514,8 +604,14 @@
                 padding: 12px;
             }
 
+            .filtros-graficas {
+                grid-template-columns: 1fr 1fr;
+                padding: 12px;
+            }
+
             .input-group input,
-            .input-group select {
+            .input-group select,
+            .input-group textarea {
                 font-size: 0.95rem;
                 padding: 8px 10px;
             }
@@ -556,6 +652,10 @@
 
             .tab-content {
                 padding: 16px;
+            }
+
+            .filtros-graficas {
+                grid-template-columns: 1fr 1fr;
             }
 
             .form-grid {
@@ -605,7 +705,7 @@
                 <div class="input-group">
                     <label>Fecha</label>
                     <input type="date" id="fecha" onchange="actualizarCriaID()">
-                    <span class="info-text">⚠️ Si es retroactivo, el ID se generará según el año de la fecha</span>
+                    <span class="info-text">Si es retroactivo, el ID se genera según el año</span>
                 </div>
             </div>
             <div>
@@ -615,23 +715,23 @@
                 </div>
                 <div class="input-group">
                     <label>ID Padre</label>
-                    <input type="text" id="padre" placeholder="Código del padre">
+                    <input type="text" id="padre" placeholder="Código del padre (o '-' si no aplica)">
                 </div>
             </div>
             <div>
                 <div class="input-group">
                     <label>Días Gestación</label>
                     <input type="number" id="gestacion" value="285" min="0" max="320" oninput="validarGestacion()">
-                    <div id="alertGest" class="alert alert-danger alert-hidden">⚠️ Gestación no cumple: mínimo 285 días para nacimiento vivo</div>
+                    <div id="alertGest" class="alert alert-danger alert-hidden">Gestación no cumple: mínimo 285 días</div>
                 </div>
                 <div class="input-group">
-                    <label>Tipo de Parto</label>
+                    <label>Tipo de Evento</label>
                     <select id="evento" onchange="validarGestacion(); toggleGemelos()">
-                        <option value="Normal">Normal</option>
-                        <option value="Gemelar">Gemelar</option>
-                        <option value="Distórcico">Distórcico</option>
-                        <option value="Mortinato">Mortinato</option>
-                        <option value="Aborto">Aborto</option>
+                        <option value="Normal">Normal - Parto vaginal sin complicaciones</option>
+                        <option value="Gemelar">Gemelar - Nacimientos múltiples (1 evento)</option>
+                        <option value="Distórcico">Distórcico - Requiere intervención especial</option>
+                        <option value="Mortinato">Mortinato - Nacido sin vida ≥ 20 semanas</option>
+                        <option value="Aborto">Aborto - Pérdida < 20 semanas</option>
                     </select>
                 </div>
             </div>
@@ -641,38 +741,45 @@
             <div class="form-grid">
                 <div>
                     <div class="input-group">
-                        <label>ID Cría 1 (Auto por año)</label>
+                        <label>ID Cría 1</label>
                         <input type="text" id="idC1" disabled>
-                        <span class="info-text" id="infoCria1">Correlativo del año seleccionado</span>
+                        <div class="id-preview" id="previewCria1">📌 ID Cría 1: <strong id="idC1Display">-</strong></div>
                         <label>Peso Cría 1 (kg)</label>
-                        <input type="number" id="p1" step="0.1" placeholder="Peso en kg" min="0">
+                        <input type="text" id="p1" placeholder="Peso en kg o '-' si no aplica">
                         <label>Sexo 1</label>
                         <select id="sx1">
                             <option>Macho</option>
                             <option>Hembra</option>
+                            <option>-</option>
                         </select>
                     </div>
                 </div>
                 <div id="boxGemelo" class="hidden">
-                    <div class="input-group">
-                        <label>ID Cría 2 (Auto por año)</label>
+                    <div class="input-group" style="border-left: 3px solid var(--syntro-6); padding-left: 12px;">
+                        <label style="color: var(--syntro-6);">ID Cría 2 (Correlativo consecutivo)</label>
                         <input type="text" id="idC2" disabled>
-                        <span class="info-text" id="infoCria2">Correlativo del año seleccionado</span>
+                        <div class="id-preview" id="previewCria2" style="border-color: var(--syntro-6);">📌 ID Cría 2: <strong id="idC2Display" style="color: var(--syntro-6);">-</strong></div>
                         <label>Peso Cría 2 (kg)</label>
-                        <input type="number" id="p2" step="0.1" placeholder="Peso en kg" min="0">
+                        <input type="text" id="p2" placeholder="Peso en kg o '-' si no aplica">
                         <label>Sexo 2</label>
                         <select id="sx2">
                             <option>Macho</option>
                             <option>Hembra</option>
+                            <option>-</option>
                         </select>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="input-group">
+            <label>Observaciones</label>
+            <textarea id="observaciones" rows="2" placeholder="Observaciones adicionales..."></textarea>
+        </div>
+
         <!-- IPP Automático por Madre -->
         <div class="ipp-display" id="ippDisplay">
-            ⏳ Ingrese una madre para calcular su IPP
+            Ingrese una madre para calcular su IPP
         </div>
 
         <button class="btn-action" onclick="guardar()">Guardar Registro</button>
@@ -690,7 +797,6 @@
             <div class="stat-card"><h4>Normales</h4><p id="normalesCount">0</p></div>
             <div class="stat-card"><h4>Gemelares</h4><p id="gemelaresCount">0</p></div>
             <div class="stat-card"><h4>Distócicos</h4><p id="distocicosCount">0</p></div>
-            <div class="stat-card"><h4>IPP Promedio</h4><p id="ippPromedio">0</p></div>
         </div>
 
         <div class="table-wrapper">
@@ -701,10 +807,10 @@
                         <th>Finca</th>
                         <th>Madre</th>
                         <th>Padre</th>
-                        <th>Cría</th>
+                        <th>Cría(s)</th>
                         <th>Evento</th>
-                        <th>Peso</th>
-                        <th>Sexo</th>
+                        <th>Peso(s)</th>
+                        <th>Sexo(s)</th>
                         <th>IPP</th>
                         <th>Acciones</th>
                     </tr>
@@ -716,11 +822,64 @@
         </div>
     </div>
 
-    <!-- ===== TAB: GRÁFICAS ===== -->
+    <!-- ===== TAB: GRÁFICAS CON FILTROS ===== -->
     <div id="viewGraficas" class="tab-content hidden">
-        <button class="btn-action btn-secondary" onclick="renderGraficas()" style="margin-bottom:16px;">
-            Actualizar Gráficas
-        </button>
+        <!-- FILTROS -->
+        <div class="filtros-graficas">
+            <div>
+                <label>Año</label>
+                <select id="filtroAnio">
+                    <option value="todos">Todos los años</option>
+                </select>
+            </div>
+            <div>
+                <label>Mes</label>
+                <select id="filtroMes">
+                    <option value="todos">Todos los meses</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            <div>
+                <label>Finca</label>
+                <select id="filtroFinca">
+                    <option value="todos">Todas las fincas</option>
+                </select>
+            </div>
+            <div>
+                <label>Evento</label>
+                <select id="filtroEvento">
+                    <option value="todos">Todos los eventos</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Gemelar">Gemelar</option>
+                    <option value="Distórcico">Distórcico</option>
+                    <option value="Mortinato">Mortinato</option>
+                    <option value="Aborto">Aborto</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:8px; align-self:end;">
+                <button class="btn-filtro" onclick="aplicarFiltrosGraficas()">Aplicar</button>
+                <button class="btn-filtro btn-limpiar" onclick="limpiarFiltrosGraficas()">Limpiar</button>
+            </div>
+        </div>
+
+        <!-- Contenedor de estadísticas filtradas -->
+        <div class="summary-stats" id="statsGraficas">
+            <div class="stat-card"><h4>Total Eventos</h4><p id="grafTotal">0</p></div>
+            <div class="stat-card"><h4>Partos Efectivos</h4><p id="grafEfectivos">0</p></div>
+            <div class="stat-card"><h4>Normales</h4><p id="grafNormales">0</p></div>
+            <div class="stat-card"><h4>Gemelares</h4><p id="grafGemelares">0</p></div>
+        </div>
 
         <div class="graph-container">
             <h3>Distribución de Eventos</h3>
@@ -821,7 +980,10 @@
         const index = ['reg', 'libro', 'graficas', 'ipp'].indexOf(v);
         if (tabs[index]) tabs[index].classList.add('active');
         
-        if (v === 'graficas') renderGraficas();
+        if (v === 'graficas') {
+            actualizarFiltrosGraficas();
+            aplicarFiltrosGraficas();
+        }
         if (v === 'ipp') renderIpp();
         if (v === 'libro') render();
     }
@@ -831,8 +993,12 @@
         const esGemelar = document.getElementById('evento').value === 'Gemelar';
         document.getElementById('boxGemelo').classList.toggle('hidden', !esGemelar);
         
-        const ocultarCrias = ['Aborto', 'Mortinato'].includes(document.getElementById('evento').value);
+        const ocultarCrias = ['Aborto'].includes(document.getElementById('evento').value);
         document.getElementById('criaFields').classList.toggle('hidden', ocultarCrias);
+        
+        if (esGemelar) {
+            actualizarCriaID();
+        }
     }
 
     // ===== VALIDACIÓN DE GESTACIÓN =====
@@ -841,8 +1007,8 @@
         const evento = document.getElementById('evento').value;
         const alerta = document.getElementById('alertGest');
         
-        const esVivo = !['Aborto', 'Mortinato'].includes(evento);
-        const esValido = esVivo ? dias >= 285 : true;
+        const esEfectivo = ['Normal', 'Gemelar', 'Distórcico'].includes(evento);
+        const esValido = esEfectivo ? dias >= 285 : true;
         
         if (!esValido) {
             alerta.classList.remove('alert-hidden');
@@ -856,7 +1022,7 @@
     // ===== GENERACIÓN DE IDs POR AÑO =====
     function getUltimoCorrelativoPorAnio(anio) {
         const anioStr = anio.toString().slice(-2);
-        const registrosAnio = db.filter(r => r.idCria && r.idCria.startsWith(anioStr));
+        const registrosAnio = db.filter(r => r.idCria && r.idCria.startsWith(anioStr) && r.idCria !== '-');
         
         if (registrosAnio.length === 0) return 0;
         
@@ -883,23 +1049,52 @@
         return anioStr + numStr;
     }
 
+    function generarIDGemelar(fecha, idCria1) {
+        if (!fecha || !idCria1) return '';
+        
+        const anio = new Date(fecha).getFullYear();
+        const anioStr = anio.toString().slice(-2);
+        
+        const numStr = idCria1.substring(2);
+        const num = parseInt(numStr);
+        if (isNaN(num)) return '';
+        
+        const nuevoNumero = num + 1;
+        const pad = nuevoNumero < 10 ? 2 : (nuevoNumero < 100 ? 2 : (nuevoNumero < 1000 ? 3 : 4));
+        const numStr2 = nuevoNumero.toString().padStart(pad, '0');
+        
+        return anioStr + numStr2;
+    }
+
     function actualizarCriaID() {
         const fecha = document.getElementById('fecha').value;
         if (!fecha) return;
         
+        const evento = document.getElementById('evento').value;
+        const esGemelar = evento === 'Gemelar';
+        
+        if (evento === 'Aborto') {
+            document.getElementById('idC1').value = '-';
+            document.getElementById('idC1Display').textContent = '-';
+            document.getElementById('idC2').value = '';
+            document.getElementById('idC2Display').textContent = '';
+            return;
+        }
+        
         const idCria1 = generarIDCria(fecha);
         document.getElementById('idC1').value = idCria1;
+        document.getElementById('idC1Display').textContent = idCria1;
         
         const anio = new Date(fecha).getFullYear();
         const ultimoCorrelativo = getUltimoCorrelativoPorAnio(anio);
-        document.getElementById('infoCria1').textContent = 
-            `Año ${anio} - Último correlativo: ${ultimoCorrelativo} → Nuevo: ${idCria1}`;
         
-        if (document.getElementById('evento').value === 'Gemelar') {
-            const idCria2 = generarIDCria(fecha);
+        if (esGemelar) {
+            const idCria2 = generarIDGemelar(fecha, idCria1);
             document.getElementById('idC2').value = idCria2;
-            document.getElementById('infoCria2').textContent = 
-                `Año ${anio} - Correlativo gemelar: ${idCria2}`;
+            document.getElementById('idC2Display').textContent = idCria2;
+        } else {
+            document.getElementById('idC2').value = '';
+            document.getElementById('idC2Display').textContent = '';
         }
     }
 
@@ -908,7 +1103,8 @@
         if (!madre) return null;
         
         const partos = db
-            .filter(r => r.madre === madre)
+            .filter(r => r.madre === madre && 
+                ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento))
             .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
         
         if (partos.length < 2) return null;
@@ -931,98 +1127,135 @@
         const display = document.getElementById('ippDisplay');
         
         if (!madre) {
-            display.innerHTML = '⏳ Ingrese una madre para calcular su IPP';
+            display.innerHTML = 'Ingrese una madre para calcular su IPP';
             return;
         }
         
         if (ipp === null) {
-            display.innerHTML = `⏳ Madre ${madre}: IPP no disponible (requiere 2+ partos)`;
+            display.innerHTML = `Madre ${madre}: IPP no disponible (requiere 2+ partos)`;
             return;
         }
         
         const estado = ipp < 280 ? 'Corto' : (ipp > 400 ? 'Largo' : 'Normal');
         const color = ipp < 280 ? '#c0392b' : (ipp > 400 ? '#f39c12' : '#27ae60');
-        display.innerHTML = `🐄 Madre ${madre} - IPP: <span style="color:${color};font-weight:700;">${ipp} días</span> (${estado})`;
+        display.innerHTML = `Madre ${madre} - IPP: <span style="color:${color};font-weight:700;">${ipp} días</span> (${estado})`;
     }
 
     // ===== GUARDAR REGISTRO =====
     function guardar() {
         if (!validarGestacion()) {
-            alert('❌ Error: La gestación no cumple con el mínimo de 285 días para nacimiento vivo');
+            alert('Error: La gestación no cumple con el mínimo de 285 días para parto efectivo');
             return;
         }
         
         const finca = document.getElementById('finca').value.trim();
         const fecha = document.getElementById('fecha').value;
         const madre = document.getElementById('madre').value.trim();
-        const padre = document.getElementById('padre').value.trim();
+        const padre = document.getElementById('padre').value.trim() || '-';
         const evento = document.getElementById('evento').value;
         const gestacion = parseInt(document.getElementById('gestacion').value) || 0;
+        const observaciones = document.getElementById('observaciones').value.trim() || '-';
         
         if (!finca || !fecha || !madre) {
-            alert('❌ Complete los campos: Finca, Fecha y Madre');
+            alert('Complete los campos: Finca, Fecha y Madre');
             return;
         }
         
-        const idCria = generarIDCria(fecha);
-        if (!idCria) {
-            alert('❌ Error al generar el ID de la cría');
-            return;
-        }
+        let idCria = '-';
+        let idCria2 = '-';
         
-        if (db.some(r => r.idCria === idCria)) {
-            alert('❌ El ID generado ya existe. Por favor verifique.');
-            return;
+        if (evento !== 'Aborto') {
+            idCria = document.getElementById('idC1').value;
+            if (!idCria || idCria === '-') {
+                alert('Error al generar el ID de la cría');
+                return;
+            }
+            if (idCria !== '-' && db.some(r => r.idCria === idCria)) {
+                alert('El ID generado ya existe. Por favor verifique.');
+                return;
+            }
+            
+            if (evento === 'Gemelar') {
+                idCria2 = document.getElementById('idC2').value;
+                if (!idCria2 || idCria2 === '-') {
+                    alert('Error al generar el ID de la segunda cría');
+                    return;
+                }
+                if (db.some(r => r.idCria === idCria2)) {
+                    alert('El ID de la segunda cría ya existe. Por favor verifique.');
+                    return;
+                }
+            }
         }
         
         if (evento !== 'Gemelar') {
             const repetido = db.some(r => r.madre === madre && r.fecha === fecha && r.evento !== 'Gemelar');
             if (repetido) {
-                alert('❌ Ya existe un parto registrado para esta madre en esta fecha');
+                alert('Ya existe un evento registrado para esta madre en esta fecha');
                 return;
             }
         }
         
-        const partosMadre = db.filter(r => r.madre === madre);
-        const numeroParto = partosMadre.length > 0 ? 
-            Math.max(...partosMadre.map(r => r.numeroParto || 0)) + 1 : 1;
+        const esEfectivo = ['Normal', 'Gemelar', 'Distórcico'].includes(evento);
+        const ipp = esEfectivo ? calcularIPP(madre) : null;
         
-        const ipp = calcularIPP(madre);
-        
-        const reg = {
-            finca, fecha, madre, padre, evento, 
-            idCria: idCria,
-            peso: parseFloat(document.getElementById('p1').value) || 0,
-            sexo: document.getElementById('sx1').value,
-            gestacion,
-            numeroParto,
-            ipp,
-            timestamp: Date.now()
-        };
+        const peso1 = document.getElementById('p1').value.trim() || '-';
+        const sexo1 = document.getElementById('sx1').value;
+        let peso2 = '-', sexo2 = '-';
         
         if (evento === 'Gemelar') {
-            const idCria2 = generarIDCria(fecha);
-            if (db.some(r => r.idCria === idCria2)) {
-                alert('❌ El ID gemelar ya existe. Por favor verifique.');
-                return;
-            }
-            reg.idCria2 = idCria2;
-            reg.peso2 = parseFloat(document.getElementById('p2').value) || 0;
-            reg.sexo2 = document.getElementById('sx2').value;
-            reg.numeroPartoGemelar = numeroParto;
+            peso2 = document.getElementById('p2').value.trim() || '-';
+            sexo2 = document.getElementById('sx2').value;
         }
+        
+        const partosEfectivos = db.filter(r => 
+            r.madre === madre && 
+            ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)
+        ).length;
+        const numeroParto = esEfectivo ? partosEfectivos + 1 : null;
+        
+        const reg = {
+            finca, fecha, madre, padre, evento,
+            gestacion: esEfectivo ? gestacion : '-',
+            idCria, idCria2,
+            peso: peso1, peso2: peso2,
+            sexo: sexo1, sexo2: sexo2,
+            ipp: ipp,
+            numeroParto: numeroParto,
+            esEfectivo: esEfectivo,
+            observaciones: observaciones,
+            timestamp: Date.now()
+        };
         
         db.push(reg);
         localStorage.setItem('sys_partos', JSON.stringify(db));
         
+        // ===== LIMPIAR CAMPOS (PERO MANTENER FINCA) =====
+        // NO se borra "finca" - se mantiene para seguir registrando
+        document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+        document.getElementById('madre').value = '';
+        document.getElementById('padre').value = '';
+        document.getElementById('gestacion').value = 285;
         document.getElementById('p1').value = '';
         document.getElementById('p2').value = '';
+        document.getElementById('observaciones').value = '';
+        document.getElementById('sx1').value = 'Macho';
         document.getElementById('sx2').value = 'Macho';
+        document.getElementById('evento').value = 'Normal';
         
-        alert('✅ Registro Guardado Exitosamente - ID: ' + idCria);
+        // Ocultar gemelo
+        document.getElementById('boxGemelo').classList.add('hidden');
+        document.getElementById('criaFields').classList.remove('hidden');
+        
+        const msg = evento === 'Gemelar' ? 
+            `✅ Registro Gemelar Guardado\nID1: ${idCria}\nID2: ${idCria2}\nParto #${numeroParto}` :
+            `✅ Registro Guardado\nID: ${idCria}\nParto #${numeroParto}`;
+        alert(msg);
+        
         actualizarCriaID();
         actualizarIPP();
         render();
+        actualizarFiltrosGraficas();
     }
 
     // ===== ELIMINAR REGISTRO =====
@@ -1032,6 +1265,7 @@
         localStorage.setItem('sys_partos', JSON.stringify(db));
         render();
         actualizarCriaID();
+        actualizarFiltrosGraficas();
     }
 
     // ===== RENDERIZAR TABLA =====
@@ -1055,22 +1289,24 @@
                     'Aborto': 'badge-aborto'
                 }[r.evento] || '';
                 
-                const pesoDisplay = r.peso ? `${r.peso} kg` : 'N/A';
-                const sexoDisplay = r.sexo || 'N/A';
-                const ippDisplay = r.ipp ? `${r.ipp} d` : 'N/A';
-                const criaDisplay = r.idCria2 ? `${r.idCria} / ${r.idCria2}` : r.idCria;
-                const padreDisplay = r.padre || 'N/A';
+                const pesoDisplay = r.peso && r.peso !== '-' ? `${r.peso} kg` : r.peso || '-';
+                const peso2Display = r.peso2 && r.peso2 !== '-' ? `${r.peso2} kg` : r.peso2 || '-';
+                const sexoDisplay = r.sexo || '-';
+                const sexo2Display = r.sexo2 || '-';
+                const ippDisplay = r.ipp ? `${r.ipp} d` : (r.evento === 'Aborto' || r.evento === 'Mortinato' ? '-' : 'N/A');
+                const criaDisplay = r.idCria2 && r.idCria2 !== '-' ? `${r.idCria} / ${r.idCria2}` : r.idCria || '-';
+                const padreDisplay = r.padre || '-';
                 const realIndex = db.indexOf(r);
                 
                 return `<tr>
                     <td>${r.fecha}</td>
                     <td>${r.finca}</td>
-                    <td>${r.madre}</td>
+                    <td><strong>${r.madre}</strong></td>
                     <td>${padreDisplay}</td>
                     <td>${criaDisplay}</td>
                     <td><span class="badge ${badgeClass}">${r.evento}</span></td>
-                    <td>${pesoDisplay}</td>
-                    <td>${sexoDisplay}</td>
+                    <td>${r.idCria2 && r.idCria2 !== '-' ? pesoDisplay + ' / ' + peso2Display : pesoDisplay}</td>
+                    <td>${r.idCria2 && r.idCria2 !== '-' ? sexoDisplay + ' / ' + sexo2Display : sexoDisplay}</td>
                     <td>${ippDisplay}</td>
                     <td>
                         <button class="btn-sm btn-danger" onclick="eliminarRegistro(${realIndex})">Eliminar</button>
@@ -1079,7 +1315,7 @@
             }).join('');
         }
         
-        const total = db.length;
+        const total = db.filter(r => ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)).length;
         const normales = db.filter(r => r.evento === 'Normal').length;
         const gemelares = db.filter(r => r.evento === 'Gemelar').length;
         const distocicos = db.filter(r => r.evento === 'Distórcico').length;
@@ -1088,13 +1324,8 @@
         document.getElementById('normalesCount').textContent = normales;
         document.getElementById('gemelaresCount').textContent = gemelares;
         document.getElementById('distocicosCount').textContent = distocicos;
-        document.getElementById('headerTotal').textContent = total;
-        document.getElementById('headerActivos').textContent = db.filter(r => r.evento !== 'Aborto').length;
-        
-        const ipps = db.map(r => r.ipp).filter(i => i !== null && i !== undefined);
-        const ippPromedio = ipps.length > 0 ? 
-            (ipps.reduce((a,b) => a + b, 0) / ipps.length).toFixed(1) : 'N/A';
-        document.getElementById('ippPromedio').textContent = ippPromedio;
+        document.getElementById('headerTotal').textContent = db.length;
+        document.getElementById('headerActivos').textContent = total;
     }
 
     function filtrar() {
@@ -1107,9 +1338,9 @@
             alert('No hay datos para exportar');
             return;
         }
-        let csv = "Fecha,Finca,Madre,Padre,Evento,ID_Cria,Peso,Sexo,IPP,Num_Parto\n";
+        let csv = "Fecha,Finca,Madre,Padre,Evento,ID_Cria,ID_Cria2,Peso,Peso2,Sexo,Sexo2,IPP,Num_Parto,Observaciones\n";
         csv += db.map(r => 
-            `${r.fecha},${r.finca},${r.madre},${r.padre || ''},${r.evento},${r.idCria},${r.peso || ''},${r.sexo || ''},${r.ipp || ''},${r.numeroParto || ''}`
+            `${r.fecha},${r.finca},${r.madre},${r.padre || '-'},${r.evento},${r.idCria || '-'},${r.idCria2 || '-'},${r.peso || '-'},${r.peso2 || '-'},${r.sexo || '-'},${r.sexo2 || '-'},${r.ipp || '-'},${r.numeroParto || '-'},"${r.observaciones || '-'}"`
         ).join("\n");
         const a = document.createElement('a');
         a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
@@ -1117,15 +1348,77 @@
         a.click();
     }
 
-    // ===== GRÁFICAS =====
-    function renderGraficas() {
-        if (db.length === 0) {
-            alert('No hay datos para mostrar en gráficas');
+    // ===== FILTROS PARA GRÁFICAS =====
+    function actualizarFiltrosGraficas() {
+        const aniosSelect = document.getElementById('filtroAnio');
+        const anios = [...new Set(db.map(r => new Date(r.fecha).getFullYear()))].sort();
+        aniosSelect.innerHTML = '<option value="todos">Todos los años</option>';
+        anios.forEach(a => {
+            aniosSelect.innerHTML += `<option value="${a}">${a}</option>`;
+        });
+
+        const fincasSelect = document.getElementById('filtroFinca');
+        const fincas = [...new Set(db.map(r => r.finca))].filter(f => f && f.trim() !== '').sort();
+        fincasSelect.innerHTML = '<option value="todos">Todas las fincas</option>';
+        fincas.forEach(f => {
+            fincasSelect.innerHTML += `<option value="${f}">${f}</option>`;
+        });
+    }
+
+    function obtenerDatosFiltrados() {
+        const anio = document.getElementById('filtroAnio').value;
+        const mes = document.getElementById('filtroMes').value;
+        const finca = document.getElementById('filtroFinca').value;
+        const evento = document.getElementById('filtroEvento').value;
+
+        let datos = db.filter(r => {
+            const fecha = new Date(r.fecha);
+            let cumple = true;
+            
+            if (anio !== 'todos') cumple = cumple && fecha.getFullYear() === parseInt(anio);
+            if (mes !== 'todos') cumple = cumple && (fecha.getMonth() + 1) === parseInt(mes);
+            if (finca !== 'todos') cumple = cumple && r.finca === finca;
+            if (evento !== 'todos') cumple = cumple && r.evento === evento;
+            
+            return cumple;
+        });
+
+        return datos;
+    }
+
+    function aplicarFiltrosGraficas() {
+        const datosFiltrados = obtenerDatosFiltrados();
+        
+        if (datosFiltrados.length === 0) {
+            alert('No hay datos para los filtros seleccionados');
             return;
         }
-        
+
+        const total = datosFiltrados.length;
+        const efectivos = datosFiltrados.filter(r => ['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)).length;
+        const normales = datosFiltrados.filter(r => r.evento === 'Normal').length;
+        const gemelares = datosFiltrados.filter(r => r.evento === 'Gemelar').length;
+
+        document.getElementById('grafTotal').textContent = total;
+        document.getElementById('grafEfectivos').textContent = efectivos;
+        document.getElementById('grafNormales').textContent = normales;
+        document.getElementById('grafGemelares').textContent = gemelares;
+
+        renderGraficasFiltradas(datosFiltrados);
+    }
+
+    function limpiarFiltrosGraficas() {
+        document.getElementById('filtroAnio').value = 'todos';
+        document.getElementById('filtroMes').value = 'todos';
+        document.getElementById('filtroFinca').value = 'todos';
+        document.getElementById('filtroEvento').value = 'todos';
+        aplicarFiltrosGraficas();
+    }
+
+    // ===== GRÁFICAS CON FILTROS =====
+    function renderGraficasFiltradas(datos) {
         const eventos = ['Normal', 'Gemelar', 'Distórcico', 'Mortinato', 'Aborto'];
-        const counts = eventos.map(e => db.filter(r => r.evento === e).length);
+        const counts = eventos.map(e => datos.filter(r => r.evento === e).length);
         const colores = ['#52B69A', '#34A0A4', '#168AAD', '#7f8c8d', '#95a5a6'];
         
         if (chartEventos) chartEventos.destroy();
@@ -1143,16 +1436,24 @@
             },
             options: {
                 responsive: true,
-                plugins: { legend: { display: false } },
+                plugins: { 
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: `Distribución de Eventos (${datos.length} registros)`
+                    }
+                },
                 scales: { y: { beginAtZero: true, stepSize: 1 } }
             }
         });
 
         const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
         const mensual = Array(12).fill(0);
-        db.forEach(r => {
+        datos.forEach(r => {
             const mes = new Date(r.fecha).getMonth();
-            if (r.evento !== 'Aborto') mensual[mes]++;
+            if (['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)) {
+                mensual[mes]++;
+            }
         });
         
         if (chartMensual) chartMensual.destroy();
@@ -1161,7 +1462,7 @@
             data: {
                 labels: meses,
                 datasets: [{
-                    label: 'Partos (excluye abortos)',
+                    label: 'Partos Efectivos por Mes',
                     data: mensual,
                     borderColor: '#184E77',
                     backgroundColor: 'rgba(24, 78, 119, 0.1)',
@@ -1178,9 +1479,12 @@
 
         const pesosPorEvento = {};
         eventos.forEach(e => pesosPorEvento[e] = []);
-        db.forEach(r => {
-            if (r.peso > 0 && r.evento !== 'Aborto') {
-                pesosPorEvento[r.evento].push(r.peso);
+        datos.forEach(r => {
+            if (r.peso && r.peso !== '-' && r.evento !== 'Aborto') {
+                const peso = parseFloat(r.peso);
+                if (!isNaN(peso)) {
+                    pesosPorEvento[r.evento].push(peso);
+                }
             }
         });
         
@@ -1204,7 +1508,13 @@
             },
             options: {
                 responsive: true,
-                plugins: { legend: { display: false } },
+                plugins: { 
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Peso Promedio por Tipo de Evento'
+                    }
+                },
                 scales: { y: { beginAtZero: true } }
             }
         });
@@ -1217,8 +1527,13 @@
         
         const partosPorMadre = {};
         db.forEach(r => {
-            if (!partosPorMadre[r.madre]) partosPorMadre[r.madre] = [];
-            partosPorMadre[r.madre].push({ fecha: new Date(r.fecha), evento: r.evento });
+            if (['Normal', 'Gemelar', 'Distórcico'].includes(r.evento)) {
+                if (!partosPorMadre[r.madre]) partosPorMadre[r.madre] = [];
+                partosPorMadre[r.madre].push({ 
+                    fecha: new Date(r.fecha), 
+                    evento: r.evento
+                });
+            }
         });
 
         let html = '';
@@ -1229,7 +1544,7 @@
         const madres = Object.keys(partosPorMadre).sort();
         
         if (madres.length === 0) {
-            body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">No hay madres registradas</td></tr>';
+            body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">No hay madres con partos efectivos</td></tr>';
             alert.classList.add('alert-hidden');
             return;
         }
@@ -1265,11 +1580,11 @@
             if (promedio < 280) {
                 estado = 'Corto';
                 color = '#c0392b';
-                alertMessages.push(`⚠️ Madre ${madre}: IPP ${ipp} días (Corto - menos de 280 días)`);
+                alertMessages.push(`Madre ${madre}: IPP ${ipp} días (Corto)`);
             } else if (promedio > 400) {
                 estado = 'Largo';
                 color = '#f39c12';
-                alertMessages.push(`⚠️ Madre ${madre}: IPP ${ipp} días (Largo - más de 400 días)`);
+                alertMessages.push(`Madre ${madre}: IPP ${ipp} días (Largo)`);
             }
 
             const ultimaFecha = partos[partos.length-1].fecha.toLocaleDateString();
@@ -1288,11 +1603,11 @@
         const promedioGeneral = countIpp > 0 ? (totalIpp / countIpp).toFixed(1) : 'N/A';
         
         if (alertMessages.length > 0) {
-            alert.innerHTML = `📊 IPP Promedio General del Hato: ${promedioGeneral} días<br><br>${alertMessages.join('<br>')}`;
+            alert.innerHTML = `📊 IPP Promedio General: ${promedioGeneral} días<br><br>${alertMessages.join('<br>')}`;
             alert.className = 'alert alert-danger';
             alert.classList.remove('alert-hidden');
         } else {
-            alert.innerHTML = `📊 IPP Promedio General del Hato: ${promedioGeneral} días - Todos los IPP están en rango normal (280-400 días)`;
+            alert.innerHTML = `📊 IPP Promedio General: ${promedioGeneral} días - Todos los IPP están en rango normal (280-400 días)`;
             alert.className = 'alert alert-success';
             alert.classList.remove('alert-hidden');
         }
@@ -1306,6 +1621,7 @@
         render();
         toggleGemelos();
         actualizarIPP();
+        actualizarFiltrosGraficas();
     });
 </script>
 
