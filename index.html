@@ -825,6 +825,9 @@
             generarIdCria1();
         }
 
+        // ==============================
+        // GENERACIÓN DE ID DE CRÍAS (CORRELATIVO DESDE 01)
+        // ==============================
         function generarIdCria1() {
             const fechaInput = document.getElementById('fecha').value;
             if (!fechaInput) return;
@@ -832,8 +835,9 @@
             const year = new Date(fechaInput).getFullYear();
             const yearShort = year.toString().slice(-2);
 
+            // CORRELATIVO EMPIEZA EN 01 (criasEnAnio + 1)
             const criasEnAnio = contarCriasEnAnio(year);
-            const correlativo = criasEnAnio.toString().padStart(2, '0');
+            const correlativo = (criasEnAnio + 1).toString().padStart(2, '0');
 
             const idCria = yearShort + correlativo;
             document.getElementById('cria1Id').value = idCria;
@@ -846,8 +850,9 @@
             const year = new Date(fechaInput).getFullYear();
             const yearShort = year.toString().slice(-2);
 
-            const criasEnAnio = contarCriasEnAnio(year) + 1;
-            const correlativo = criasEnAnio.toString().padStart(2, '0');
+            // Para la cría 2, el correlativo es el siguiente (criasEnAnio + 2)
+            const criasEnAnio = contarCriasEnAnio(year);
+            const correlativo = (criasEnAnio + 2).toString().padStart(2, '0');
 
             const idCria = yearShort + correlativo;
             document.getElementById('cria2Id').value = idCria;
