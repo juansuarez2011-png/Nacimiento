@@ -88,6 +88,7 @@
         .form-group {
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .form-group label {
@@ -95,6 +96,9 @@
             color: #184e77;
             margin-bottom: 8px;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .form-group input,
@@ -118,6 +122,103 @@
             color: #168aad;
             font-weight: bold;
             cursor: not-allowed;
+        }
+
+        .form-group input.editable-id {
+            background: #fffde7;
+            border: 2px solid #f0ad4e;
+            color: #184e77;
+            font-weight: bold;
+            cursor: text;
+        }
+
+        .form-group input.editable-id:focus {
+            border-color: #168aad;
+            background: white;
+        }
+
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: #168aad;
+            color: white;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: help;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .info-icon:hover .info-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .info-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            background: #184e77;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: normal;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            max-width: 280px;
+            white-space: normal;
+            line-height: 1.4;
+        }
+
+        .info-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #184e77;
+        }
+
+        .id-info-text {
+            margin-top: 6px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #e6f3ff 0%, #cce5ff 100%);
+            border-left: 3px solid #168aad;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #184e77;
+            line-height: 1.5;
+        }
+
+        .id-badge {
+            display: inline-block;
+            background: #168aad;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+            margin: 0 2px;
+        }
+
+        .id-badge.sugerido {
+            background: #76c893;
+        }
+
+        .id-badge.ultimo {
+            background: #f0ad4e;
         }
 
         .cria-section {
@@ -186,6 +287,15 @@
 
         .btn-info:hover {
             background: linear-gradient(135deg, #52b69a 0%, #34a0a4 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #99d98c 0%, #76c893 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #76c893 0%, #52b69a 100%);
         }
 
         .btn-danger {
@@ -314,6 +424,24 @@
             gap: 15px;
         }
 
+        .export-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #d9ed92 0%, #b5e48c 100%);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .storage-info {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+            border-left: 4px solid #e63946;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #184e77;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -436,6 +564,17 @@
             .filter-grid {
                 grid-template-columns: 1fr;
             }
+
+            .info-tooltip {
+                left: 0;
+                transform: translateY(5px);
+                max-width: 250px;
+            }
+
+            .info-tooltip::after {
+                left: 15px;
+                transform: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -490,6 +629,10 @@
         <div class="module">
             <h2 class="module-title">📝 Módulo 1: Registro de Parto</h2>
             
+            <div class="storage-info">
+                <strong>⚠️ Importante:</strong> Los datos se guardan en este navegador. Use "Exportar a CSV" para hacer respaldos.
+            </div>
+
             <div id="alert" class="alert"></div>
 
             <form id="partoForm">
@@ -520,7 +663,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="diasGestacion">Días de Gestación</label>
+                        <label for="diasGestacion">
+                            Días de Gestación
+                            <span class="info-icon">i
+                                <span class="info-tooltip">
+                                    Valor sugerido: 285 días. Puede ingresar cualquier valor (282, 283, 315, 340, etc.) según el caso real del animal.
+                                </span>
+                            </span>
+                        </label>
                         <input type="number" id="diasGestacion" placeholder="Días de gestación" min="1" value="285" required>
                     </div>
 
@@ -552,8 +702,18 @@
                     <h3 class="cria-title">CRÍA 1</h3>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="cria1Id">ID de la Cría (Automático)</label>
-                            <input type="text" id="cria1Id" placeholder="Se genera automáticamente" readonly required>
+                            <label for="cria1Id">
+                                ID de la Cría
+                                <span class="info-icon">i
+                                    <span class="info-tooltip" id="tooltipCria1">
+                                        Seleccione una fecha para ver los IDs disponibles
+                                    </span>
+                                </span>
+                            </label>
+                            <input type="text" id="cria1Id" class="editable-id" placeholder="Se sugiere automáticamente, puede editar" required>
+                            <div class="id-info-text" id="infoCria1">
+                                💡 Seleccione una fecha para ver el ID sugerido
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -576,8 +736,18 @@
                     <h3 class="cria-title">CRÍA 2 (Solo para partos gemelares)</h3>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="cria2Id">ID de la Cría (Automático)</label>
-                            <input type="text" id="cria2Id" placeholder="Se genera automáticamente" readonly>
+                            <label for="cria2Id">
+                                ID de la Cría
+                                <span class="info-icon">i
+                                    <span class="info-tooltip" id="tooltipCria2">
+                                        Seleccione una fecha para ver los IDs disponibles
+                                    </span>
+                                </span>
+                            </label>
+                            <input type="text" id="cria2Id" class="editable-id" placeholder="Se sugiere automáticamente, puede editar">
+                            <div class="id-info-text" id="infoCria2">
+                                💡 Seleccione una fecha para ver el ID sugerido
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -645,6 +815,7 @@
                         <th>Toro</th>
                         <th>N°</th>
                         <th>Evento</th>
+                        <th>Días Gest.</th>
                         <th>Cría ID</th>
                         <th>Sexo</th>
                         <th>Peso</th>
@@ -654,6 +825,12 @@
                 </thead>
                 <tbody id="tablaBody"></tbody>
             </table>
+
+            <div class="export-section">
+                <button type="button" class="btn btn-success" onclick="exportarCSV()">
+                    📥 Exportar a CSV
+                </button>
+            </div>
         </div>
     </div>
 
@@ -724,15 +901,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let registros = JSON.parse(localStorage.getItem('registrosGanaderos')) || [];
+        let registros = [];
+        try {
+            const stored = localStorage.getItem('registrosGanaderos');
+            if (stored) {
+                registros = JSON.parse(stored);
+            }
+        } catch (e) {
+            console.error('Error al cargar localStorage:', e);
+            registros = [];
+        }
+        
         let chartTipos = null;
         let chartSexo = null;
         let chartIPP = null;
 
-        // ==============================
-        // CONFIGURACIÓN INICIAL
-        // ==============================
-        
         function establecerFechaHoy() {
             const hoy = new Date();
             const año = hoy.getFullYear();
@@ -743,15 +926,87 @@
         }
 
         function cargarUltimaFinca() {
-            const ultimaFinca = localStorage.getItem('ultimaFinca');
-            if (ultimaFinca) {
-                document.getElementById('finca').value = ultimaFinca;
+            try {
+                const ultimaFinca = localStorage.getItem('ultimaFinca');
+                if (ultimaFinca) {
+                    document.getElementById('finca').value = ultimaFinca;
+                }
+            } catch (e) {
+                console.error('Error al cargar finca:', e);
+            }
+        }
+
+        function actualizarInfoUltimoId() {
+            const fechaInput = document.getElementById('fecha').value;
+            const tipoParto = document.getElementById('tipoParto').value;
+            const infoCria1 = document.getElementById('infoCria1');
+            const infoCria2 = document.getElementById('infoCria2');
+            const tooltipCria1 = document.getElementById('tooltipCria1');
+            const tooltipCria2 = document.getElementById('tooltipCria2');
+            
+            if (!fechaInput) {
+                infoCria1.innerHTML = ' Seleccione una fecha para ver el ID sugerido';
+                infoCria2.innerHTML = '💡 Seleccione una fecha para ver el ID sugerido';
+                tooltipCria1.textContent = 'Seleccione una fecha para ver los IDs disponibles';
+                tooltipCria2.textContent = 'Seleccione una fecha para ver los IDs disponibles';
+                return;
+            }
+
+            const year = new Date(fechaInput).getFullYear();
+            const yearShort = year.toString().slice(-2);
+            const criasEnAnio = contarCriasEnAnio(year);
+
+            let ultimoCorrelativo = 0;
+            let ultimoIdRegistrado = null;
+            
+            registros.forEach(reg => {
+                const regYear = new Date(reg.fecha).getFullYear();
+                if (regYear === year && reg.crias.length > 0) {
+                    reg.crias.forEach(cria => {
+                        const idStr = String(cria.id);
+                        if (idStr.startsWith(yearShort)) {
+                            const correlativo = parseInt(idStr.slice(-2));
+                            if (correlativo > ultimoCorrelativo) {
+                                ultimoCorrelativo = correlativo;
+                                ultimoIdRegistrado = cria.id;
+                            }
+                        }
+                    });
+                }
+            });
+
+            const proximoId1 = yearShort + String(criasEnAnio + 1).padStart(2, '0');
+            const proximoId2 = yearShort + String(criasEnAnio + 2).padStart(2, '0');
+
+            let htmlCria1 = '';
+            if (ultimoCorrelativo > 0) {
+                htmlCria1 = `📋 Año ${year}: Último registrado <span class="id-badge ultimo">${ultimoIdRegistrado}</span> | Total: <strong>${criasEnAnio}</strong> crías<br>`;
+            } else {
+                htmlCria1 = `📋 Año ${year}: Sin registros previos. Primer correlativo: <span class="id-badge ultimo">01</span><br>`;
+            }
+            htmlCria1 += `✅ ID sugerido: <span class="id-badge sugerido">${proximoId1}</span> (editable)`;
+            infoCria1.innerHTML = htmlCria1;
+
+            tooltipCria1.innerHTML = `Año ${year}: ${criasEnAnio} crías registradas.<br>Último ID: ${ultimoIdRegistrado || 'Ninguno'}<br>Sugerido: ${proximoId1}`;
+
+            if (tipoParto === 'Gemelar') {
+                let htmlCria2 = `📋 Año ${year}: Total <strong>${criasEnAnio}</strong> crías<br>`;
+                htmlCria2 += `✅ ID sugerido CRÍA 2: <span class="id-badge sugerido">${proximoId2}</span> (editable)`;
+                infoCria2.innerHTML = htmlCria2;
+                tooltipCria2.innerHTML = `CRÍA 2 (Gemelar)<br>Sugerido: ${proximoId2}`;
+            } else {
+                infoCria2.innerHTML = '💡 Seleccione "Gemelar" para activar CRÍA 2';
+                tooltipCria2.textContent = 'Solo disponible para partos gemelares';
             }
         }
 
         window.addEventListener('DOMContentLoaded', function() {
             establecerFechaHoy();
             cargarUltimaFinca();
+            setTimeout(() => {
+                generarIdCria1();
+                actualizarInfoUltimoId();
+            }, 100);
         });
 
         document.getElementById('tipoParto').addEventListener('change', function() {
@@ -765,10 +1020,8 @@
                 document.getElementById('cria2Sexo').value = '';
                 document.getElementById('cria2Peso').value = '';
             }
+            actualizarInfoUltimoId();
         });
-
-        document.getElementById('madre').addEventListener('change', calcularNumParto);
-        document.getElementById('madre').addEventListener('blur', calcularNumParto);
 
         document.getElementById('fecha').addEventListener('change', function() {
             generarIdCria1();
@@ -776,13 +1029,12 @@
                 generarIdCria2();
             }
             calcularNumParto();
+            actualizarInfoUltimoId();
         });
 
-        document.getElementById('diasGestacion').addEventListener('change', calcularIPP);
+        document.getElementById('madre').addEventListener('change', calcularNumParto);
+        document.getElementById('madre').addEventListener('blur', calcularNumParto);
 
-        // ==============================
-        // CÁLCULO DE NÚMERO DE PARTO E IPP
-        // ==============================
         function calcularNumParto() {
             const madreId = document.getElementById('madre').value.trim();
             const fechaActual = new Date(document.getElementById('fecha').value);
@@ -826,9 +1078,6 @@
             generarIdCria1();
         }
 
-        // ==============================
-        // GENERACIÓN DE ID DE CRÍAS (CORRELATIVO DESDE 01)
-        // ==============================
         function generarIdCria1() {
             const fechaInput = document.getElementById('fecha').value;
             if (!fechaInput) return;
@@ -868,11 +1117,6 @@
             return count;
         }
 
-        function calcularIPP() {
-            // Función auxiliar
-        }
-
-        // Calcular IPP real basado en último parto EFECTIVO
         function calcularIPPReal(madreId, fechaActual) {
             const fechaActualDate = new Date(fechaActual);
             
@@ -911,7 +1155,7 @@
         }
 
         // ==============================
-        // VALIDACIÓN Y GUARDADO
+        // VALIDACIÓN Y GUARDADO (SIN RESTRICCIÓN DE DÍAS)
         // ==============================
         document.getElementById('partoForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -933,15 +1177,13 @@
                 mostrarAlerta('❌ Error: Debe seleccionar una fecha.', 'error');
                 return;
             }
+
+            // ✅ SIN RESTRICCIÓN DE DÍAS DE GESTACIÓN
+            // El usuario puede ingresar cualquier valor (282, 283, 315, 340, etc.)
             
-            if (tipoParto !== 'Aborto' && tipoParto !== 'Mortinato') {
-                if (diasGestacion < 285) {
-                    mostrarAlerta(
-                        `❌ ERROR: Para partos "${tipoParto}", los días de gestación deben ser MAYOR O IGUAL a 285 días. Actualmente tiene ${diasGestacion} días.`,
-                        'error'
-                    );
-                    return;
-                }
+            if (!document.getElementById('cria1Id').value.trim()) {
+                mostrarAlerta('❌ Error: El ID de la CRÍA 1 no puede estar vacío.', 'error');
+                return;
             }
 
             if (tipoParto === 'Gemelar') {
@@ -965,17 +1207,17 @@
                 crias: []
             };
 
-            if (document.getElementById('cria1Id').value) {
+            if (document.getElementById('cria1Id').value.trim()) {
                 registro.crias.push({
-                    id: document.getElementById('cria1Id').value,
+                    id: document.getElementById('cria1Id').value.trim(),
                     sexo: document.getElementById('cria1Sexo').value,
                     peso: parseFloat(document.getElementById('cria1Peso').value)
                 });
             }
 
-            if (tipoParto === 'Gemelar' && document.getElementById('cria2Id').value) {
+            if (tipoParto === 'Gemelar' && document.getElementById('cria2Id').value.trim()) {
                 registro.crias.push({
-                    id: document.getElementById('cria2Id').value,
+                    id: document.getElementById('cria2Id').value.trim(),
                     sexo: document.getElementById('cria2Sexo').value,
                     peso: parseFloat(document.getElementById('cria2Peso').value)
                 });
@@ -983,9 +1225,15 @@
 
             registros.push(registro);
             registros.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-            localStorage.setItem('registrosGanaderos', JSON.stringify(registros));
-
-            localStorage.setItem('ultimaFinca', finca);
+            
+            try {
+                localStorage.setItem('registrosGanaderos', JSON.stringify(registros));
+                localStorage.setItem('ultimaFinca', finca);
+            } catch (e) {
+                console.error('Error al guardar:', e);
+                mostrarAlerta('❌ Error al guardar los datos.', 'error');
+                return;
+            }
 
             mostrarAlerta('✅ Registro guardado exitosamente', 'success');
             this.reset();
@@ -996,75 +1244,146 @@
             document.getElementById('ippCalculado').textContent = '- días';
             document.getElementById('numPartoDisplay').textContent = '-';
             document.getElementById('cria2Section').classList.add('hidden');
+            
+            setTimeout(() => {
+                generarIdCria1();
+                actualizarInfoUltimoId();
+            }, 100);
         });
 
         function verDatos() {
-            if (registros.length === 0) {
-                alert('No hay registros guardados');
+            if (!registros || registros.length === 0) {
+                alert('No hay registros guardados.');
                 return;
             }
 
-            const tbody = document.getElementById('tablaBody');
-            tbody.innerHTML = '';
+            try {
+                const modal = document.getElementById('modalDatos');
+                const tbody = document.getElementById('tablaBody');
+                tbody.innerHTML = '';
 
-            let totalCrias = 0;
-            let sumaPeso = 0;
-            let sumaIPP = 0;
-            let countIPP = 0;
-            const tiposParto = {};
+                let totalCrias = 0;
+                let sumaPeso = 0;
+                let sumaIPP = 0;
+                let countIPP = 0;
 
-            registros.forEach((reg, index) => {
-                if (reg.ipp > 0) {
-                    sumaIPP += reg.ipp;
-                    countIPP++;
-                }
-                tiposParto[reg.tipoParto] = (tiposParto[reg.tipoParto] || 0) + 1;
+                registros.forEach((reg, index) => {
+                    if (reg.ipp > 0) {
+                        sumaIPP += reg.ipp;
+                        countIPP++;
+                    }
 
-                reg.crias.forEach((cria, criaIndex) => {
-                    totalCrias++;
-                    sumaPeso += cria.peso;
+                    reg.crias.forEach((cria) => {
+                        totalCrias++;
+                        sumaPeso += cria.peso;
 
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${reg.fecha}</td>
-                            <td>${reg.finca}</td>
-                            <td>${reg.madre}</td>
-                            <td>${reg.toro}</td>
-                            <td>${reg.numParto}</td>
-                            <td>${reg.tipoParto}</td>
-                            <td>${cria.id}</td>
-                            <td>${cria.sexo}</td>
-                            <td>${cria.peso} Kg</td>
-                            <td>${reg.ipp > 0 ? reg.ipp : '-'}</td>
-                            <td>
-                                <button class="btn btn-danger btn-small" onclick="eliminarRegistro(${index})">
-                                    🗑️ Eliminar
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${reg.fecha}</td>
+                                <td>${reg.finca}</td>
+                                <td>${reg.madre}</td>
+                                <td>${reg.toro}</td>
+                                <td>${reg.numParto}</td>
+                                <td>${reg.tipoParto}</td>
+                                <td>${reg.diasGestacion}</td>
+                                <td>${cria.id}</td>
+                                <td>${cria.sexo}</td>
+                                <td>${cria.peso} Kg</td>
+                                <td>${reg.ipp > 0 ? reg.ipp : '-'}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-small" onclick="eliminarRegistro(${index})">
+                                        ️ Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
                 });
-            });
 
-            const promIPP = countIPP > 0 ? (sumaIPP / countIPP).toFixed(0) : 0;
-            const promPeso = totalCrias > 0 ? (sumaPeso / totalCrias).toFixed(1) : 0;
-            const diasAbiertos = countIPP > 0 ? (promIPP - 283).toFixed(0) : 0;
+                const promIPP = countIPP > 0 ? (sumaIPP / countIPP).toFixed(0) : 0;
+                const promPeso = totalCrias > 0 ? (sumaPeso / totalCrias).toFixed(1) : 0;
+                const diasAbiertos = countIPP > 0 ? (promIPP - 283).toFixed(0) : 0;
 
-            document.getElementById('ippProm').textContent = promIPP;
-            document.getElementById('diasAbiertos').textContent = diasAbiertos;
-            document.getElementById('totalCrias').textContent = totalCrias;
-            document.getElementById('promPeso').textContent = promPeso;
+                document.getElementById('ippProm').textContent = promIPP;
+                document.getElementById('diasAbiertos').textContent = diasAbiertos;
+                document.getElementById('totalCrias').textContent = totalCrias;
+                document.getElementById('promPeso').textContent = promPeso;
 
-            document.getElementById('modalDatos').style.display = 'block';
+                modal.style.display = 'block';
+            } catch (e) {
+                console.error('Error al mostrar datos:', e);
+                alert('Error al mostrar los datos: ' + e.message);
+            }
         }
 
         function eliminarRegistro(registroIndex) {
             if (confirm('¿Está seguro de eliminar este registro? Esta acción no se puede deshacer.')) {
-                registros.splice(registroIndex, 1);
-                localStorage.setItem('registrosGanaderos', JSON.stringify(registros));
-                verDatos();
-                mostrarAlerta('✅ Registro eliminado correctamente', 'success');
+                try {
+                    registros.splice(registroIndex, 1);
+                    localStorage.setItem('registrosGanaderos', JSON.stringify(registros));
+                    verDatos();
+                    actualizarInfoUltimoId();
+                    mostrarAlerta('✅ Registro eliminado correctamente', 'success');
+                } catch (e) {
+                    console.error('Error al eliminar:', e);
+                    mostrarAlerta('❌ Error al eliminar el registro', 'error');
+                }
             }
+        }
+
+        function exportarCSV() {
+            if (!registros || registros.length === 0) {
+                alert('No hay registros para exportar');
+                return;
+            }
+
+            const headers = ['Fecha', 'Finca', 'Madre', 'Toro', 'N° Parto', 'Tipo Parto', 'Días Gestación', 'Cría ID', 'Sexo', 'Peso (Kg)', 'IPP'];
+            
+            let csvContent = headers.join(',') + '\n';
+            
+            registros.forEach(reg => {
+                reg.crias.forEach(cria => {
+                    const row = [
+                        reg.fecha,
+                        reg.finca,
+                        reg.madre,
+                        reg.toro,
+                        reg.numParto,
+                        reg.tipoParto,
+                        reg.diasGestacion,
+                        cria.id,
+                        cria.sexo,
+                        cria.peso,
+                        reg.ipp > 0 ? reg.ipp : ''
+                    ];
+                    
+                    const escapedRow = row.map(value => {
+                        const str = String(value);
+                        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                            return '"' + str.replace(/"/g, '""') + '"';
+                        }
+                        return str;
+                    });
+                    
+                    csvContent += escapedRow.join(',') + '\n';
+                });
+            });
+
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            const hoy = new Date();
+            const fechaArchivo = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `registros_partos_${fechaArchivo}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            mostrarAlerta('✅ Archivo CSV exportado exitosamente', 'success');
         }
 
         function obtenerAniosUnicos() {
@@ -1084,9 +1403,6 @@
             return Array.from(fincas).sort();
         }
 
-        // ==============================
-        // PALETA DE COLORES SYNTRO
-        // ==============================
         const syntroColors = {
             verdeClaro: '#d9ed92',
             verdeMedio: '#b5e48c',
@@ -1101,7 +1417,7 @@
         };
 
         function verGraficos() {
-            if (registros.length === 0) {
+            if (!registros || registros.length === 0) {
                 alert('No hay registros guardados');
                 return;
             }
@@ -1144,16 +1460,11 @@
                 plugins: {
                     legend: {
                         position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 10
-                            }
-                        }
+                        labels: { font: { size: 10 } }
                     }
                 }
             };
 
-            // GRÁFICO DE BARRAS - TIPOS DE PARTO
             if (chartTipos) chartTipos.destroy();
             const ctxTipos = document.getElementById('chartTipos').getContext('2d');
             chartTipos = new Chart(ctxTipos, {
@@ -1175,18 +1486,10 @@
                 },
                 options: {
                     ...commonOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
                 }
             });
 
-            // GRÁFICO DE DONA - SEXO
             if (chartSexo) chartSexo.destroy();
             const ctxSexo = document.getElementById('chartSexo').getContext('2d');
             chartSexo = new Chart(ctxSexo, {
@@ -1263,28 +1566,10 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: {
-                                        size: 10
-                                    }
-                                }
-                            }
-                        },
+                        plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } },
                         scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { font: { size: 9 } }
-                            },
-                            x: {
-                                ticks: { 
-                                    font: { size: 9 },
-                                    maxRotation: 45,
-                                    minRotation: 45
-                                }
-                            }
+                            y: { beginAtZero: true, ticks: { font: { size: 9 } } },
+                            x: { ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 45 } }
                         }
                     }
                 });
