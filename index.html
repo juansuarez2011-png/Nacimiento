@@ -318,18 +318,19 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 13px;
         }
 
         th {
             background: linear-gradient(135deg, #168aad 0%, #1a759f 100%);
             color: white;
-            padding: 12px;
+            padding: 10px 8px;
             text-align: left;
             font-weight: 600;
         }
 
         td {
-            padding: 12px;
+            padding: 10px 8px;
             border-bottom: 1px solid #e0e0e0;
         }
 
@@ -404,11 +405,11 @@
             }
 
             table {
-                font-size: 12px;
+                font-size: 11px;
             }
 
             th, td {
-                padding: 8px;
+                padding: 6px 4px;
             }
 
             .modal-content {
@@ -482,12 +483,12 @@
             <div class="logo-container">
                 <img src="LOGO2.png" alt="Logo Syntro BioControl Pro">
             </div>
-            <h1>Registro Ganadero</h1>
+            <h1>🐄 Registro Ganadero</h1>
             <p>BioRegistro</p>
         </div>
 
         <div class="module">
-            <h2 class="module-title">📝 Módulo 1: Registros de Parto</h2>
+            <h2 class="module-title">📝 Módulo 1: Registro de Parto</h2>
             
             <div id="alert" class="alert"></div>
 
@@ -506,6 +507,11 @@
                     <div class="form-group">
                         <label for="madre">Madre (ID)</label>
                         <input type="text" id="madre" placeholder="ID de la madre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="toro">Toro (ID)</label>
+                        <input type="text" id="toro" placeholder="ID del toro" required>
                     </div>
 
                     <div class="form-group">
@@ -636,6 +642,7 @@
                         <th>Fecha</th>
                         <th>Finca</th>
                         <th>Madre</th>
+                        <th>Toro</th>
                         <th>N°</th>
                         <th>Evento</th>
                         <th>Cría ID</th>
@@ -768,7 +775,6 @@
             if (document.getElementById('tipoParto').value === 'Gemelar') {
                 generarIdCria2();
             }
-            // Recalcular número de parto e IPP cuando cambia la fecha
             calcularNumParto();
         });
 
@@ -788,26 +794,21 @@
                 return;
             }
 
-            // Obtener todos los partos de esta madre con fecha ANTERIOR a la fecha ingresada
             const partosAnteriores = registros.filter(reg => {
                 const fechaRegistro = new Date(reg.fecha);
                 return reg.madre === madreId && fechaRegistro < fechaActual;
             });
 
-            // Contar solo partos EFECTIVOS (no aborto/mortinato) anteriores
             const partosEfectivosAnteriores = partosAnteriores.filter(reg => 
                 reg.tipoParto !== 'Aborto' && reg.tipoParto !== 'Mortinato'
             );
 
-            // Número de parto = partos efectivos anteriores + 1
             const numParto = partosEfectivosAnteriores.length + 1;
 
             document.getElementById('numParto').value = numParto;
             document.getElementById('numPartoDisplay').textContent = numParto;
 
-            // Calcular IPP basado en el último parto efectivo anterior
             if (partosEfectivosAnteriores.length > 0) {
-                // Ordenar por fecha descendente y obtener el más reciente
                 const partosOrdenados = partosEfectivosAnteriores.sort((a, b) => 
                     new Date(b.fecha) - new Date(a.fecha)
                 );
@@ -835,7 +836,6 @@
             const year = new Date(fechaInput).getFullYear();
             const yearShort = year.toString().slice(-2);
 
-            // CORRELATIVO EMPIEZA EN 01 (criasEnAnio + 1)
             const criasEnAnio = contarCriasEnAnio(year);
             const correlativo = (criasEnAnio + 1).toString().padStart(2, '0');
 
@@ -850,7 +850,6 @@
             const year = new Date(fechaInput).getFullYear();
             const yearShort = year.toString().slice(-2);
 
-            // Para la cría 2, el correlativo es el siguiente (criasEnAnio + 2)
             const criasEnAnio = contarCriasEnAnio(year);
             const correlativo = (criasEnAnio + 2).toString().padStart(2, '0');
 
@@ -870,7 +869,7 @@
         }
 
         function calcularIPP() {
-            // Función auxiliar si es necesaria
+            // Función auxiliar
         }
 
         // Calcular IPP real basado en último parto EFECTIVO
@@ -887,7 +886,7 @@
             );
             
             if (partosEfectivos.length === 0) {
-                return 0; // Primer parto efectivo
+                return 0;
             }
 
             const partosOrdenados = partosEfectivos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
@@ -921,6 +920,7 @@
             const diasGestacion = parseInt(document.getElementById('diasGestacion').value);
             const numParto = parseInt(document.getElementById('numParto').value);
             const madreId = document.getElementById('madre').value;
+            const toroId = document.getElementById('toro').value;
             const fechaParto = document.getElementById('fecha').value;
             const finca = document.getElementById('finca').value;
             
@@ -934,7 +934,6 @@
                 return;
             }
             
-            // VALIDACIÓN ESTRICTA
             if (tipoParto !== 'Aborto' && tipoParto !== 'Mortinato') {
                 if (diasGestacion < 285) {
                     mostrarAlerta(
@@ -958,6 +957,7 @@
                 fecha: fechaParto,
                 finca: finca,
                 madre: madreId,
+                toro: toroId,
                 numParto: numParto,
                 diasGestacion: diasGestacion,
                 tipoParto: tipoParto,
@@ -982,7 +982,6 @@
             }
 
             registros.push(registro);
-            // Ordenar registros por fecha para mantener consistencia
             registros.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
             localStorage.setItem('registrosGanaderos', JSON.stringify(registros));
 
@@ -1030,6 +1029,7 @@
                             <td>${reg.fecha}</td>
                             <td>${reg.finca}</td>
                             <td>${reg.madre}</td>
+                            <td>${reg.toro}</td>
                             <td>${reg.numParto}</td>
                             <td>${reg.tipoParto}</td>
                             <td>${cria.id}</td>
